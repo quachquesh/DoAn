@@ -1,8 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@900&display=swap');
+
+:root {
+	--navbar-height: 86px;
+	--navbar-background: #fffa65;
+	--navbar-border: red;
+	--navbar-text-coler-top: #ffffff;
+	--navbar-text-coler: #0077ff;
+	--font-logo: 'Grenze Gotisch', cursive;
+	--font-navbar: 'Kanit', sans-serif;
+}
+
 *, html, body {
 	margin: 0;
 	padding: 0;
 }
 
-header {
-	background-color: ;
+html {
+	font-size: 62.5%;
 }
+
+/* Header */
+
+header {
+	width: 100%;
+	transition: .3s;
+}
+
+.navbar-full {
+	position: fixed;
+	width: 100%;
+	background-color: transparent;
+	height: var(--navbar-height);
+	transition: .3s;
+}
+
+.background-color {
+	background-color: var(--navbar-background);
+	transition: .3s;
+}
+
+header .container,
+header .row,
+header nav {
+	height: 100%;
+}
+
+header .logo {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	font-size: 4rem;
+	font-weight: 900;
+	font-family: var(--font-logo);
+	color: var(--navbar-text-coler-top);
+	text-decoration: none;
+	transition: .3s;
+}
+
+header nav {
+	margin-left: 50px;
+}
+
+header nav .navbar {
+	display: flex;
+	list-style: none;
+}
+
+header nav .navbar .navbar__menu {
+	line-height: var(--navbar-height);
+}
+
+header nav .navbar .navbar__menu a {
+	position: relative;
+	font-size: 2.2rem;
+	padding: 10px 13px;
+	text-transform: uppercase;
+	font-weight: 600;
+	font-family: var(--font-navbar);
+	color: var(--navbar-text-coler-top);
+	text-decoration: none;
+	transition: .3s;
+}
+
+header nav .navbar .navbar__menu a:hover {
+	color: var(--navbar-text-coler-top);
+	transition: .3s;
+}
+
+.navbar-text-color {
+	color: var(--navbar-text-coler) !important;
+	transition: .3s;
+}
+
+header nav .navbar .navbar__menu a::before {
+	content: '';
+	position: absolute;
+	width: 100%;
+	right: 0;
+	bottom: 0px;
+	border-bottom: 4px solid var(--navbar-border);
+	width: 0%;
+	animation: widthNav linear .3s;
+}
+
+@keyframes widthNav {
+	from {width: 100%;}
+	to { width: 0%}
+}
+
+header nav .navbar .navbar__menu a:hover::before {
+	left: 0;
+	width: 100%;
+	animation: widthNavStart linear .3s;
+}
+
+@keyframes widthNavStart {
+	from {width: 0%;}
+	to { width: 100%}
+}
+
+.nav-background {
+	width: 100%;
+	height: 800px;
+}
+
+.nav-background__img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	/* object-position: center; */
+}
+/* END Header */
+
+/* Body */

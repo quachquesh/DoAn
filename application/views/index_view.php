@@ -10,23 +10,69 @@
 </head>
 <body>
 	<header>
-		<div class="container">
-			<div class="row">
-				<a href="" class="logo"><img src="<?php echo base_url() ?>vendor/img/order-food-64.png"></a>
-				<nav>
-					<ul>
-						<li><a href="">Trang chủ</a></li>
-						<li><a href="">Thực đơn</a></li>
-						<li><a href="">Tin tức</a></li>
-						<li><a href="">Về chúng tôi</a></li>
-					</ul>
-				</nav>
-			</div>
+		<?php include('template/header.php') ?>
+		<div class="nav-background">
+			<img class="nav-background__img" src="<?php base_url(); ?>vendor/img/store_master.jpg" alt="">
 		</div>
 	</header>
 
 	<div class="container">
-		
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
+		<div>asd</div>
 	</div>
 
 	<footer>
