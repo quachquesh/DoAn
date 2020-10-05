@@ -13,7 +13,6 @@ class Index extends CI_Controller {
 		// $this->load->view('template/main', $data, false);
 		$this->load->view('index_view');
 	}
-
 }
 
 /* End of file Test.php */
