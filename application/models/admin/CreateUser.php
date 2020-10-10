@@ -17,10 +17,7 @@ class CreateUser extends CI_Model {
 		);
 		unset($array['password']);
 		$check = $this->db->insert('admins', $array);
-		if ($check) {
-			return $this->db->insert('admin_login', $admin_login);
-		}
-		return $check;
+		return $this->db->insert('admin_login', $admin_login);
 	}
 }
 

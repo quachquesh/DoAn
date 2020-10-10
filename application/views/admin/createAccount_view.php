@@ -75,7 +75,7 @@
 							<select name="level">
 								<option value="">--- Chọn chức vụ ---</option>
 								<?php foreach ($duty as $value): ?>
-								<option value="<?php echo $value->level ?>"><?php echo $value->duty ?></option>
+								<option value="<?php echo $value['level'] ?>"><?php echo $value['duty'] ?></option>
 								<?php endforeach ?>
 							</select>
 						</div>
@@ -88,6 +88,8 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript" src="/vendor/js/msgBox.js"></script>
 
 <script>
 
@@ -130,31 +132,12 @@
 				ShowMsgBox('Lỗi!', data.message, 'OK', 'fail');
 		})
 		.fail(function() {
-			ShowMsgBox('Thất bại!', 'Thêm tài khoản <b>thất bại</b>', 'OK', 'fail');
+			ShowMsgBox('Thất bại!', 'Tên đăng nhập <b>đã tồn tại</b>', 'OK', 'fail');
 		})
 		.always(function() {
 			console.log("complete");
 		});
 		
-	}
-
-	// Message Box/ msgbox
-	function ShowMsgBox(title, content, button, style = "success") {
-		var msgBoxElement = document.getElementById('message-box');
-		msgBoxElement.classList.add('show-box');
-		msgBoxElement.querySelector('.message-body').classList.add(style);
-		msgBoxElement.querySelector('.message-body__title').innerHTML = title;
-		msgBoxElement.querySelector('.message-body__content').innerHTML = content;
-		msgBoxElement.querySelector('.message-body__button').innerHTML = button;
-	}
-	var msgBoxElement = document.getElementById('message-box');
-	var msgBoxOverLayElement = document.querySelector('.message-box__overlay');
-	msgBoxOverLayElement.onclick = function() {
-		msgBoxElement.classList.remove('show-box');
-	}
-	var msgBoxButtonElement = document.querySelector('.message-body__button');
-	msgBoxButtonElement.onclick = function() {
-		msgBoxElement.classList.remove('show-box');
 	}
 
 	document.getElementById('account-manager').parentElement.classList.add('active');

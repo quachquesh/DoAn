@@ -13,7 +13,7 @@ class GetData extends CI_Model {
 	public function getDuty()
 	{
 		$this->db->select('*');
-		return $this->db->get('admin_duty_level')->result();
+		return $this->db->get('admin_duty_level')->result_array();
 	}
 }
 

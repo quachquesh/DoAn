@@ -5,8 +5,8 @@ class CreateAccount extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		if(!$this->session->userdata('level') || $this->session->userdata('level') > 2 || $this->session->userdata('level') < 1){
-			echo "Không đủ quyền";
+		if(!$this->session->userdata('accountManager')){
+			$this->output->set_status_header(500);
 			die();
 		}
 	}
@@ -22,8 +22,6 @@ class CreateAccount extends CI_Controller {
 			$data['email'] = $this->input->post('email');
 			$data['phoneNumber'] = $this->input->post('phoneNumber');
 			$data['level'] = $this->input->post('level');
-
-			$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
 			$res['status'] = true;
 
@@ -61,15 +59,20 @@ class CreateAccount extends CI_Controller {
 					$res['status'] = false;
 					$res['message'] = "Vui lòng nhập 'Số điện thoại' đúng định dạng";
 				}
+				else if ($this->minMaxLength($data['password'], 6, 18)) {
+					$res['status'] = false;
+					$res['message'] = "Mật khẩu phải từ 6-18 kí tự";
+				}
 			}
 			if ($res['status'] == true) {
+				$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 				$data['createBy'] = $this->session->userdata('userName');
 				$this->load->model('admin/CreateUser');
 				if ($this->CreateUser->AddData($data)) {
 					$res['message'] = "Tạo tài khoản thành công";
 				} else {
 					$res['status'] = false;
-					$res['message'] = "Thêm dữ liệu thất bại";
+					$res['message'] = "Tên đăng nhập đã tồn tại";
 				}
 			}
 			$this->output
@@ -104,6 +107,12 @@ class CreateAccount extends CI_Controller {
 	// Có kí tự cấm trong HTML => true
 	function checkHTML($string) {
 		return !!preg_match('/[<>(){}\/\\\\]/', $string);	
+	}
+
+	function minMaxLength($str, $min, $max)
+	{
+		$length = strlen($str);
+		return ($length < $min || $length > $max) ? true : false;
 	}
 }
 

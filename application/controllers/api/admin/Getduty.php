@@ -18,7 +18,7 @@ class Getduty extends CI_Controller {
 			$this->load->model('admin/GetData');
 			$data = $this->GetData->getDuty();
 			foreach ($data as $key => $value) {
-				$level[$key] = $value->level;
+				$level[$key] = $value['level'];
 			}
 			array_multisort($data, SORT_ASC, $level);
 			$this->output

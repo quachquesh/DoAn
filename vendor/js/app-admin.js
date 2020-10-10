@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+	var appMainBody = document.getElementById('app-main__inner');
 
   	// mini menu user
 	var btnUser = document.querySelector('.user-pane');
@@ -47,9 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// Slide bar
 	var btnSlideBar = document.querySelectorAll('.nav-menu__title.dropdown-mm');
-
+	// click menu có menu con
 	btnSlideBar.forEach(function(el) {
-		el.onclick = function() {
+		el.addEventListener('click', function() {
 			var parentElement = this.parentElement;
 			var miniMenu = parentElement.querySelector('.mini-menu');
 			if (miniMenu.clientHeight) {
@@ -58,14 +59,14 @@ document.addEventListener('DOMContentLoaded', function() {
 				miniMenu.style.height = (parentElement.querySelector('.mm-collapse').clientHeight + 3) + "px";
 			}
 			this.querySelector('.nav-menu__title-icon').classList.toggle('active');
-
-		}
+		})
 	})
 
+	// click Menu không mini menu hoặc item menu con
 	var slideBarActive = document.querySelectorAll('.nav-menu__title.slidebar-btn');
 	var miniMenuItems = document.querySelectorAll('.mm-collapse li');
 	slideBarActive.forEach( function(el) {
-		el.onclick = function() {
+		el.addEventListener('click', function() {
 			slideBarActive.forEach( function(element) {
 				element.classList.remove('active');
 			});
@@ -73,10 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
 				element.classList.remove('active');
 			});
 			this.classList.add('active');
-		}
+		})
 	});
 	miniMenuItems.forEach(function(el) {
-		el.onclick = function() {
+		el.addEventListener('click', function() {
 			slideBarActive.forEach( function(element) {
 				element.classList.remove('active');
 			});
@@ -84,34 +85,69 @@ document.addEventListener('DOMContentLoaded', function() {
 				element.classList.remove('active');
 			});
 			this.classList.add('active');
-		}
+		})
 	})
 
+	// Click Dashboard
+	if (document.getElementById('dashboard')) {
+		document.getElementById('dashboard').addEventListener('click', function() {
+			if (appMainBody.getAttribute('data-inner') != 'dashboard') {
+				$.ajax({
+					url: '/api/admin/DashBoard',
+					type: 'PUT',
+					dataType: 'html'
+				})
+				.done(function(data) {
+					$('#app-main__inner').html(data);
+					appMainBody.setAttribute('data-inner', 'dashboard');
+				})
+				.fail(function(data) {
+					console.log(data);
+				})
+				.always(function() {
+					// console.log("complete");
+				});
+				
+			}
+		})
+	}
 	// click Quản lý tài khoản slide bar menu
-	document.getElementById('account-manager').onclick = function() {
-		$('#app-main__inner').load('admin/AccountManager');
+	if (document.getElementById('account-manager')) {
+		document.getElementById('account-manager').addEventListener('click', function() {
+			if (appMainBody.getAttribute('data-inner') != 'account-manager') {
+				// $('#app-main__inner').load('api/admin/AccountManager');
+				$.ajax({
+					url: '/api/admin/AccountManager',
+					type: 'PUT',
+					dataType: 'html'
+				})
+				.done(function(data) {
+					$('#app-main__inner').html(data);
+					appMainBody.setAttribute('data-inner', 'account-manager');
+				})
+				.fail(function(data) {
+					console.log(data);
+				})
+				.always(function() {
+					// console.log("complete");
+				});
+				
+			}
+		})
 	}
 
-	// Message Box/ msgbox
-	function ShowMsgBox(title, content, button, style = "success") {
-		var msgBoxElement = document.getElementById('message-box');
-		msgBoxElement.classList.add('show-box');
-		msgBoxElement.querySelector('.message-body').classList.add(style);
-		msgBoxElement.querySelector('.message-body__title').innerHTML = title;
-		msgBoxElement.querySelector('.message-body__content').innerHTML = content;
-		msgBoxElement.querySelector('.message-body__button').innerHTML = button;
-	}
-	var msgBoxElement = document.getElementById('message-box');
-	var msgBoxOverLayElement = document.querySelector('.message-box__overlay');
-	msgBoxOverLayElement.onclick = function() {
-		msgBoxElement.classList.remove('show-box');
-	}
-	var msgBoxButtonElement = document.querySelector('.message-body__button');
-	msgBoxButtonElement.onclick = function() {
-		msgBoxElement.classList.remove('show-box');
-	}
 
-	window.onload = function() {
-		document.querySelector('.loading-page').classList.add('hidden');
-	}
+
+	// document.addEventListener("load", function(){
+ //    	document.querySelector('.loading-page').classList.add('hidden');
+	// });
+	// $(window).load(function() {
+	// 	document.querySelector('.loading-page').classList.add('hidden');
+	// })
+	document.addEventListener('readystatechange', event => { 
+	    // When window loaded ( external resources are loaded too- `css`,`src`, etc...) 
+	    if (event.target.readyState === "complete") {
+	    	document.querySelector('.loading-page').classList.add('hidden');   
+	    }
+	});
 },false);

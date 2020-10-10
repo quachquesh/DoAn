@@ -11,7 +11,7 @@
 	<div class="container">
 		<div class="form">
 			<h2>Đăng nhập</h2>
-			<form id="form-login">
+			<form id="form-login" method="POST">
 				<div class="formBox">
 					<input type="Text" name="username" placeholder="Tên đăng nhập" required>
 				</div>
