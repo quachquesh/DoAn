@@ -4,8 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Đăng nhập</title>
-	<link rel="icon" href="<?php echo base_url() ?>vendor/img/order-food-32.png">
-	<link rel="stylesheet" href="<?php echo base_url(); ?>vendor/css/login.css">
+	<link rel="icon" href="/vendor/img/order-food-32.png">
+	<link rel="stylesheet" href="/vendor/css/login.css">
 </head>
 <body>
 	<div class="container">
@@ -50,7 +50,7 @@
 			document.querySelector('.loading').style.display = 'unset';
 			btnLogin.style.display = 'none';
 			$.ajax({
-				url: '<?php echo base_url() ?>api/Login',
+				url: '/api/Login/Admin',
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -70,7 +70,7 @@
 					document.querySelector('.container').style.height = "350px";
 					document.querySelector('.error-message').innerHTML = error;
 				} else {
-					console.log(data);
+					location.reload();
 				}
 			})
 			.fail(function(data) {

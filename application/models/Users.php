@@ -15,11 +15,6 @@ class Users extends CI_Model {
 		$this->db->where('username', $username);
 		return $this->db->get('users')->row_array();
 	}
-	public function ValidateAdmin($username)
-	{
-		$this->db->where('username', $username);
-		return $this->db->get('admin')->row_array();
-	}
 }
 
 /* End of file Account.php */

@@ -11,7 +11,7 @@ class Logout extends CI_Controller {
 	{
 		$method = $this->input->server('REQUEST_METHOD');
 		if ($method == "POST") {
-			if ($this->session->userdata('email')) {
+			if ($this->session->userdata('userName')) {
 				$this->session->sess_destroy();
 				$data['status'] = true;
 				$data['message'] = "Đăng xuất thành công";
@@ -30,6 +30,8 @@ class Logout extends CI_Controller {
 		        ->set_output(json_encode($data))
 		        ->set_status_header(200);
 	        }
+		} else {
+			$this->output->set_status_header(500);
 		}
 	}
 

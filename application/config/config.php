@@ -23,8 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/ssm/';
-// $config['base_url'] = 'http://192.168.1.6/ssm/';
+$config['base_url'] = 'http://localhost/';
+// $config['base_url'] = 'http://192.168.1.4/';
 
 /*
 |--------------------------------------------------------------------------
