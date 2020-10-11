@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-	var appMainBody = document.getElementById('app-main__inner');
-
   	// mini menu user
 	var btnUser = document.querySelector('.user-pane');
 	btnUser.onclick = function() {
@@ -32,12 +30,15 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (this.classList.contains('showbar')) {
 			this.classList.remove('showbar');
 			this.classList.add('hidebar');
+			// document.querySelector('body').style.overflowX = 'unset';
 			slideBarElement.classList.add('hidebar');
 			setTimeout(function() {
 				appMain.classList.add('full-width');
 			}, 700);
 		} else {
-			appMain.classList.remove('full-width');
+			appMain.classList.remove('full-width', 'mobile');
+			// appMain.classList.remove('full-width');
+			// document.querySelector('body').style.overflowX = 'hidden';
 			setTimeout(function() {
 				btnActiveSlideBar.classList.remove('hidebar');
 				btnActiveSlideBar.classList.add('showbar');
@@ -88,54 +89,31 @@ document.addEventListener('DOMContentLoaded', function() {
 		})
 	})
 
-	// Click Dashboard
-	if (document.getElementById('dashboard')) {
-		document.getElementById('dashboard').addEventListener('click', function() {
-			if (appMainBody.getAttribute('data-inner') != 'dashboard') {
-				$.ajax({
-					url: '/api/admin/DashBoard',
-					type: 'PUT',
-					dataType: 'html'
-				})
-				.done(function(data) {
-					$('#app-main__inner').html(data);
-					appMainBody.setAttribute('data-inner', 'dashboard');
-				})
-				.fail(function(data) {
-					console.log(data);
-				})
-				.always(function() {
-					// console.log("complete");
-				});
-				
-			}
-		})
-	}
-	// click Quản lý tài khoản slide bar menu
-	if (document.getElementById('account-manager')) {
-		document.getElementById('account-manager').addEventListener('click', function() {
-			if (appMainBody.getAttribute('data-inner') != 'account-manager') {
-				// $('#app-main__inner').load('api/admin/AccountManager');
-				$.ajax({
-					url: '/api/admin/AccountManager',
-					type: 'PUT',
-					dataType: 'html'
-				})
-				.done(function(data) {
-					$('#app-main__inner').html(data);
-					appMainBody.setAttribute('data-inner', 'account-manager');
-				})
-				.fail(function(data) {
-					console.log(data);
-				})
-				.always(function() {
-					// console.log("complete");
-				});
-				
-			}
-		})
-	}
 
+	var appMainBody = document.getElementById('app-main__inner');
+	document.querySelectorAll('.nav-menu__title.slidebar-btn').forEach( function(element, index) {
+		element.addEventListener('click', function() {
+			var elID = this.getAttribute('id');
+			if (appMainBody.getAttribute('data-inner') != elID) {
+				document.querySelector('.loading-app-main').classList.remove('hidden');
+				$.ajax({
+					url: '/api/admin/'+elID,
+					type: 'PUT',
+					dataType: 'html'
+				})
+				.done(function(data) {
+					$('#app-main__inner').html(data);
+					appMainBody.setAttribute('data-inner', elID);
+				})
+				.fail(function(data) {
+					// console.log(data);
+				})
+				.always(function() {
+					document.querySelector('.loading-app-main').classList.add('hidden');
+				});
+			}
+		})
+	});
 
 
 	// document.addEventListener("load", function(){

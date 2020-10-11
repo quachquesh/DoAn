@@ -25,12 +25,14 @@ class CreateAccount extends CI_Controller {
 
 			$res['status'] = true;
 
+			$this->load->model('Validator');
+
 			foreach ($data as $key => $value) {
-				if ($this->isRequired($value)) {
+				if ($this->Validator->isRequired($value)) {
 					$res['status'] = false;
 					$res['message'] = "Vui lòng điền vào tất cả các trường";
 					break;
-				} else if ($this->checkKiTuDacBiet($value)) {
+				} else if ($this->Validator->checkKiTuDacBiet($value)) {
 					if ($key != 'password' && $key != 'email') {
 						$res['status'] = false;
 						$res['message'] = "Vui lòng không điền các kí tự không hợp lệ";
@@ -41,25 +43,25 @@ class CreateAccount extends CI_Controller {
 			if ($res['status'] != false) {
 				if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
 					$res['status'] = false;
-					$res['message'] = "Vui lòng nhập 'Email' đúng định dạng";
+					$res['message'] = "Vui lòng nhập <b>Email</b> đúng định dạng";
 				}
-				else if ($this->checkHTML($data['email'])) {
+				else if ($this->Validator->checkHTML($data['email'])) {
 					$res['status'] = false;
 					$res['message'] = "Vui lòng không điền các kí tự không hợp lệ";
 				}
-				else if ($this->checkNumber($data['firstName'])) {
+				else if ($this->Validator->checkNumber($data['firstName'])) {
 					$res['status'] = false;
-					$res['message'] = "Vui lòng nhập 'Họ và tên lót' đúng định dạng";
+					$res['message'] = "Vui lòng nhập <b>Họ và tên lót</b> đúng định dạng";
 				}
-				else if ($this->checkNumber($data['lastName'])) {
+				else if ($this->Validator->checkNumber($data['lastName'])) {
 					$res['status'] = false;
-					$res['message'] = "Vui lòng nhập 'Tên' đúng định dạng";
+					$res['message'] = "Vui lòng nhập <b>Tên</b> đúng định dạng";
 				}
-				else if (!$this->isNumber($data['phoneNumber'])) {
+				else if (!$this->Validator->isNumber($data['phoneNumber'])) {
 					$res['status'] = false;
-					$res['message'] = "Vui lòng nhập 'Số điện thoại' đúng định dạng";
+					$res['message'] = "Vui lòng nhập <b>Số điện thoại</b> đúng định dạng";
 				}
-				else if ($this->minMaxLength($data['password'], 6, 18)) {
+				else if ($this->Validator->minMaxLength($data['password'], 6, 18)) {
 					$res['status'] = false;
 					$res['message'] = "Mật khẩu phải từ 6-18 kí tự";
 				}
@@ -82,37 +84,6 @@ class CreateAccount extends CI_Controller {
 		} else {
 			$this->output->set_status_header(500);
 		}
-	}
-
-	// chuỗi rỗng => true
-	function isRequired($str) {
-		return empty($str) ? true : false;
-	}
-
-	// có số trong chuỗi => true
-	function checkNumber($str) {
-		return !!preg_match("/([0-9])/",$str);
-	}
-
-	// có kí tự khác ngàoi số => false
-	function isNumber($number) {
-		return !!preg_match("/^[0-9]*$/",$number);
-	}
-
-	// Có kí tự đặc biệt => true
-	function checkKiTuDacBiet($string) {
-		return preg_match('/[!@#$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $string);
-	}
-
-	// Có kí tự cấm trong HTML => true
-	function checkHTML($string) {
-		return !!preg_match('/[<>(){}\/\\\\]/', $string);	
-	}
-
-	function minMaxLength($str, $min, $max)
-	{
-		$length = strlen($str);
-		return ($length < $min || $length > $max) ? true : false;
 	}
 }
 

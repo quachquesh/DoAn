@@ -20,7 +20,7 @@ class AccountManager extends CI_Controller {
 			foreach ($data as $key => $value) {
 				$level[$key] = $value['level'];
 			}
-			array_multisort($data, SORT_ASC, $level);
+			array_multisort($level, SORT_ASC, $data);
 
 			$adminLevel = $this->session->userdata('level');
 			if ($adminLevel != 1) {
@@ -33,7 +33,7 @@ class AccountManager extends CI_Controller {
 			}
 
 			$data = array('duty' => $data);
-			$this->load->view('admin/createAccount_view', $data, FALSE);
+			$this->load->view('admin/AccountManager/main', $data, FALSE);
 
 			$this->output->set_status_header(201);
 		} else {
@@ -42,6 +42,3 @@ class AccountManager extends CI_Controller {
 	}
 
 }
-
-/* End of file AccountManager.php */
-/* Location: ./application/controllers/AccountManager.php */

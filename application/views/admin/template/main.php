@@ -25,8 +25,15 @@
 			<?php include "slidebar.php"; ?>
 
 			<div class="app-main__outer">
-				<div class="app-main__inner" id="app-main__inner" data-inner="dashboard">
-					<?php include __DIR__ . '/../dashboard_view.php'; ?>
+				<div class="outer-box">
+					<div class="loading-app-main hidden">
+						<svg>
+							<circle cx="70" cy="70" r="70"></circle>
+						</svg>
+					</div>
+					<div class="app-main__inner" id="app-main__inner" data-inner="DashBoard">
+						<?php include __DIR__ . '/../dashboard_view.php'; ?>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -35,9 +42,9 @@
 	<div class="message-box" id="message-box">
 		<div class="message-box__overlay"></div>
 		<div class="message-body">
-			<h2 class="message-body__title">Title</h2>
-			<div class="message-body__content">Content</div>
-			<div class="message-body__button btn">Button</div>
+			<h2 class="message-body__title"></h2>
+			<div class="message-body__content"></div>
+			<div class="message-body__button btn"></div>
 		</div>
 	</div>
 

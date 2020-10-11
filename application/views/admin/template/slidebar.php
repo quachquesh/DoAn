@@ -2,7 +2,7 @@
 	<div class="app-slidebar__inner">
 		<ul class="nav-menu">
 			<li>
-				<div id="dashboard" class="nav-menu__title slidebar-btn active">
+				<div id="DashBoard" class="nav-menu__title slidebar-btn active">
 					<div class="nav-menu__title-name">
 						<div class="icon-menu" style="background-image: url(/vendor/img/dashboard-black-18dp.svg)"></div>
 						DashBoard
@@ -11,7 +11,7 @@
 			</li>
 			<?php if ($this->session->userdata('accountManager')): ?>
 			<li>
-				<div id="account-manager" class="nav-menu__title slidebar-btn">
+				<div id="AccountManager" class="nav-menu__title slidebar-btn">
 					<div  class="nav-menu__title-name">
 						<div class="icon-menu" style="background-image: url(/vendor/img/person-black-18dp.svg)"></div>
 						Quản lý tài khoản
@@ -19,14 +19,16 @@
 				</div>
 			</li>
 			<?php endif ?>
+			<?php if ($this->session->userdata('menuManager')): ?>
 			<li>
-				<div id="menu-manager" class="nav-menu__title slidebar-btn">
+				<div id="MenuManager" class="nav-menu__title slidebar-btn">
 					<div  class="nav-menu__title-name">
 						<div class="icon-menu" style="background-image: url(/vendor/img/restaurant_menu-black-18dp.svg)"></div>
-						<span>Quản lý thực đơn</span>
+						<span>Quản lý sản phẩm</span>
 					</div>
 				</div>
 			</li>
+			<?php endif ?>
 			<li>
 				<div class="nav-menu__title dropdown-mm">
 					<div class="nav-menu__title-name">

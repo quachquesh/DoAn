@@ -16,7 +16,7 @@ class DataUser extends CI_Model {
 		// 		FROM admins, admin_duty_level
 		// 		WHERE admins.userName='$userName' AND admins.level=admin_duty_level.level";
 
-		$sql = "SELECT admins.*, admin_duty_level.duty, admin_duty_level.accountManager
+		$sql = "SELECT *
 				FROM admins
 				INNER JOIN admin_duty_level
 				ON admins.userName='$userName' AND admins.level=admin_duty_level.level";
