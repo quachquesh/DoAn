@@ -51,10 +51,11 @@ class MenuManager extends CI_Controller {
 		if ($method == 'PUT') {
 
 			$data = $this->GetData->getMenu();
-			foreach ($data as $key => $value) {
-				$typeCode[$key] = $value['typeCode'];
-			}
-			array_multisort($typeCode, SORT_ASC, $data);
+			// -- sắp xếp typeCode
+			// foreach ($data as $key => $value) {
+			// 	$typeCode[$key] = $value['typeCode'];
+			// }
+			// array_multisort($typeCode, SORT_ASC, $data);
 
 			$data = array(
 				'menuData' => $data,
@@ -69,4 +70,29 @@ class MenuManager extends CI_Controller {
 		}
 	}
 
+	public function getMenuData($id = -1)
+	{
+		$method = $this->input->server('REQUEST_METHOD');
+		if ($method == 'GET') {
+			if ($id != -1) {
+				$res = $this->GetData->getMenu($id);
+			} else {
+				$res = $this->GetData->getMenu();
+			}
+
+			if (!$res) {
+				$res['status'] = false;
+				$res['message'] = 'Không tìm thấy thông tin';
+			} else if ($id != -1) {
+				$res = $res[0];
+			}
+
+			$this->output
+	        ->set_content_type('application/json')
+	        ->set_output(json_encode($res))
+	        ->set_status_header(200);
+		} else {
+			$this->output->set_status_header(500);
+		}
+	}
 }

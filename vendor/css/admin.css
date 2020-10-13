@@ -155,7 +155,9 @@ body { background-color: #EAEDEF; }
 
 .app-main__outer.full-width { padding-left: 0; transition: padding linear .2s; }
 
-.app-main__outer .outer-box { width: 100%; height: 100%; }
+.app-main__outer.full-width .edit-product .inner__body-card .form-box { margin-left: 33.3333%; }
+
+.app-main__outer .outer-box { position: relative; width: 100%; height: 100%; }
 
 .app-main__inner { display: flex; flex-direction: column; flex: 1; padding: 30px; }
 
@@ -221,6 +223,16 @@ body { background-color: #EAEDEF; }
 
 .product-list .product-items .button-box .button-delete:active { background-color: #d63031; }
 
+.edit-product { position: fixed; top: calc(50% + 25px); left: 50%; transform: translate(-50%, -50%); z-index: 10; width: 100%; height: 100%; transition: linear .2s; opacity: 1; visibility: unset; }
+
+.edit-product.hidden { transition: linear .2s; visibility: hidden; opacity: 0; }
+
+.edit-product .inner__body-card { background-color: transparent; }
+
+.edit-product .inner__body-card .form-box { background-color: var(--background-card); margin-top: 45px; margin-left: calc(33.3333% + var(--width-slidebar)); z-index: 2; }
+
+.edit-product .inner__body-card .overlay { position: absolute; z-index: -1; background-color: rgba(0, 0, 0, 0.3); width: 110%; height: 110%; cursor: pointer; z-index: 1; }
+
 /* Responsive */
 /* Mobile */
 @media (max-width: 739px) { .logo-src { display: none; }
@@ -267,6 +279,10 @@ body { background-color: #EAEDEF; }
 
 .header-card .header-card__title { flex: 1; margin-left: 10px; font-size: 18px; font-weight: 500; color: #6b6b6b; }
 
+.header-card .close-tab { width: 36px; height: 36px; cursor: pointer; }
+
+.header-card .close-tab svg { width: 36px; height: 36px; fill: red; }
+
 .label-group { position: relative; width: 100%; z-index: 1; margin-top: 25px; margin-bottom: 15px; user-select: none; }
 
 .label-group:first-child { margin-top: 0px; }
@@ -277,7 +293,7 @@ body { background-color: #EAEDEF; }
 
 .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
 
-.form-group .img-preview { width: 140px; height: 170px; margin-left: 50%; transform: translateX(-50%); }
+.form-group .img-preview { width: 140px; height: 170px; object-fit: cover; margin-left: 50%; transform: translateX(-50%); }
 
 .form-group label { font-size: 17px; margin-bottom: 3px; text-transform: uppercase; }
 

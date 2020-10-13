@@ -5,7 +5,7 @@ class CreateProduct extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		if(!$this->session->userdata('menuManager')){
+		if(!$this->session->has_userdata('menuManager')){
 			$this->output->set_status_header(500);
 			die();
 		} else {

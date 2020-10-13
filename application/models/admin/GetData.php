@@ -16,9 +16,12 @@ class GetData extends CI_Model {
 		return $this->db->get('admin_duty_level')->result_array();
 	}
 
-	public function getMenu()
+	public function getMenu($id = -1)
 	{
 		$this->db->select('*');
+		if ($id != -1) {
+			$this->db->where('id', $id);
+		}
 		return $this->db->get('menu')->result_array();
 	}
 

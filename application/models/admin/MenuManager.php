@@ -23,6 +23,17 @@ class MenuManager extends CI_Model {
 		$this->db->where('id', $id);
 		return $this->db->update('menu', $data);
 	}
+
+	public function deleteProduct($id)
+	{
+		$this->db->where('id', $id);
+		return $this->db->delete('menu');
+	}
+	public function updateProductById($id, $data)
+	{
+		$this->db->where('id', $id);
+		return $this->db->update('menu', $data);
+	}
 }
 
 /* End of file MenuManager.php */
