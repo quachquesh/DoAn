@@ -48,12 +48,18 @@
 		</div>
 	</div>
 
-	<script type="text/javascript" src="/vendor/js/jquery-3.5.1.min.js"></script>
-	<script type="text/javascript" src="/vendor/js/app-admin.js"></script>
-	<script type="text/javascript" src="/vendor/js/msgBox.js"></script>
+	
+	<div class="message-modal" id="message-modal"></div>
+	<div class="question-box" id="question-box"></div>
+
+	<script defer type="text/javascript" src="/vendor/js/jquery-3.5.1.min.js"></script>
+	<script defer type="text/javascript" src="/vendor/js/app-admin.js"></script>
+	<script defer type="text/javascript" src="/vendor/js/msgBox.js"></script>
 
 	<script>
-		
+		document.querySelector('.icon-img').onclick = function() {
+			ShowQuestionBox('test');
+		}
 	</script>
 </body>
 </html>

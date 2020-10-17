@@ -22,7 +22,7 @@ class DeleteProduct extends CI_Controller {
 			$res['status'] = false;
 
 			$this->load->model('admin/GetData');
-			$data = $this->GetData->getMenu($id);
+			$data = $this->GetData->getProduct($id);
 			if ($data) {
 				if ($this->MenuManager->deleteProduct($id)) {
 					unlink($data[0]['avt']);

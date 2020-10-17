@@ -4,7 +4,7 @@
 			<li>
 				<div id="DashBoard" class="nav-menu__title slidebar-btn active">
 					<div class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/dashboard-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">dashboard</div>
 						DashBoard
 					</div>
 				</div>
@@ -13,7 +13,7 @@
 			<li>
 				<div id="AccountManager" class="nav-menu__title slidebar-btn">
 					<div  class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/person-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">people_alt</div>
 						Quản lý tài khoản
 					</div>
 				</div>
@@ -23,7 +23,7 @@
 			<li>
 				<div id="MenuManager" class="nav-menu__title slidebar-btn">
 					<div  class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/restaurant_menu-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">restaurant_menu</div>
 						<span>Quản lý sản phẩm</span>
 					</div>
 				</div>
@@ -32,7 +32,7 @@
 			<li>
 				<div class="nav-menu__title dropdown-mm">
 					<div class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/grade-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">menu_book</div>
 						Menu 1
 					</div>
 					<div class="nav-menu__title-icon"></div>
@@ -48,7 +48,7 @@
 			<li>
 				<div class="nav-menu__title dropdown-mm">
 					<div class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/grade-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">menu_book</div>
 						Menu 1
 					</div>
 					<div class="nav-menu__title-icon"></div>
@@ -64,7 +64,7 @@
 			<li>
 				<div class="nav-menu__title slidebar-btn">
 					<div class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/grade-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">menu_book</div>
 						DashBoard
 					</div>
 				</div>
@@ -72,7 +72,7 @@
 			<li>
 				<div class="nav-menu__title dropdown-mm">
 					<div class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/grade-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">menu_book</div>
 						Menu 1
 					</div>
 					<div class="nav-menu__title-icon"></div>
@@ -88,7 +88,7 @@
 			<li>
 				<div class="nav-menu__title dropdown-mm">
 					<div class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/grade-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">menu_book</div>
 						Menu 1
 					</div>
 					<div class="nav-menu__title-icon"></div>
@@ -104,7 +104,7 @@
 			<li>
 				<div class="nav-menu__title dropdown-mm">
 					<div class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/grade-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">menu_book</div>
 						Menu 1
 					</div>
 					<div class="nav-menu__title-icon"></div>
@@ -120,7 +120,7 @@
 			<li>
 				<div class="nav-menu__title dropdown-mm">
 					<div class="nav-menu__title-name">
-						<div class="icon-menu" style="background-image: url(/vendor/img/grade-black-18dp.svg)"></div>
+						<div class="icon-menu material-icons">menu_book</div>
 						Menu 1
 					</div>
 					<div class="nav-menu__title-icon"></div>

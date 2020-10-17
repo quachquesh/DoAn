@@ -16,25 +16,19 @@ class GetData extends CI_Model {
 		return $this->db->get('admin_duty_level')->result_array();
 	}
 
-	public function getMenu($id = -1)
+	public function getProduct($id = -1)
 	{
 		$this->db->select('*');
 		if ($id != -1) {
 			$this->db->where('id', $id);
 		}
-		return $this->db->get('menu')->result_array();
+		return $this->db->get('product')->result_array();
 	}
 
-	public function getMenuDiscountType()
+	public function getProductType()
 	{
 		$this->db->select('*');
-		return $this->db->get('menu_discount_type')->result_array();
-	}
-
-	public function getMenuType()
-	{
-		$this->db->select('*');
-		return $this->db->get('menu_type')->result_array();
+		return $this->db->get('product_type')->result_array();
 	}
 }
 

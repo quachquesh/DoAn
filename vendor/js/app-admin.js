@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				document.querySelector('.loading-app-main').classList.remove('hidden');
 				$.ajax({
 					url: '/api/admin/'+elID,
-					type: 'PUT',
+					type: 'GET',
 					dataType: 'html'
 				})
 				.done(function(data) {
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	// $(window).load(function() {
 	// 	document.querySelector('.loading-page').classList.add('hidden');
 	// })
-	document.addEventListener('readystatechange', event => { 
+	document.addEventListener('readystatechange', function(event) { 
 	    // When window loaded ( external resources are loaded too- `css`,`src`, etc...) 
 	    if (event.target.readyState === "complete") {
 	    	document.querySelector('.loading-page').classList.add('hidden');   

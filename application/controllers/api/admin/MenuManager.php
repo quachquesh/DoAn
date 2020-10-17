@@ -16,14 +16,14 @@ class MenuManager extends CI_Controller {
 	public function index()
 	{
 		$method = $this->input->server('REQUEST_METHOD');
-		if ($method == 'PUT') {
+		if ($method == 'GET') {
 			
-			$data = $this->GetData->getMenuType();
+			$data = $this->GetData->getProductType();
 
 			$data = array('menuType' => $data);
 			$this->load->view('admin/MenuManager/main', $data, FALSE);
 
-			$this->output->set_status_header(201);
+			$this->output->set_status_header(200);
 		} else {
 			$this->output->set_status_header(500);
 		}
@@ -32,14 +32,14 @@ class MenuManager extends CI_Controller {
 	public function CreateProduct()
 	{
 		$method = $this->input->server('REQUEST_METHOD');
-		if ($method == 'PUT') {
+		if ($method == 'GET') {
 			
-			$data = $this->GetData->getMenuType();
+			$data = $this->GetData->getProductType();
 
 			$data = array('menuType' => $data);
 			$this->load->view('admin/MenuManager/createProduct', $data, FALSE);
 
-			$this->output->set_status_header(201);
+			$this->output->set_status_header(200);
 		} else {
 			$this->output->set_status_header(500);
 		}
@@ -48,9 +48,9 @@ class MenuManager extends CI_Controller {
 	public function ShowProduct()
 	{
 		$method = $this->input->server('REQUEST_METHOD');
-		if ($method == 'PUT') {
+		if ($method == 'GET') {
 
-			$data = $this->GetData->getMenu();
+			$data = $this->GetData->getProduct();
 			// -- sắp xếp typeCode
 			// foreach ($data as $key => $value) {
 			// 	$typeCode[$key] = $value['typeCode'];
@@ -59,12 +59,26 @@ class MenuManager extends CI_Controller {
 
 			$data = array(
 				'menuData' => $data,
-				'discountType' => $this->GetData->getMenuDiscountType(),
-				'menuType' => $this->GetData->getMenuType()
+				'productType' => $this->GetData->getProductType()
 			);
 			$this->load->view('admin/MenuManager/showProduct', $data, FALSE);
 
-			$this->output->set_status_header(201);
+			$this->output->set_status_header(200);
+		} else {
+			$this->output->set_status_header(500);
+		}
+	}
+
+	public function ShowProductType()
+	{
+		$method = $this->input->server('REQUEST_METHOD');
+		if ($method == 'GET') {
+			$data = array(
+				'productType' => $this->GetData->getProductType()
+			);
+			$this->load->view('admin/MenuManager/showProductType', $data, FALSE);
+
+			$this->output->set_status_header(200);
 		} else {
 			$this->output->set_status_header(500);
 		}
@@ -75,9 +89,9 @@ class MenuManager extends CI_Controller {
 		$method = $this->input->server('REQUEST_METHOD');
 		if ($method == 'GET') {
 			if ($id != -1) {
-				$res = $this->GetData->getMenu($id);
+				$res = $this->GetData->getProduct($id);
 			} else {
-				$res = $this->GetData->getMenu();
+				$res = $this->GetData->getProduct();
 			}
 
 			if (!$res) {

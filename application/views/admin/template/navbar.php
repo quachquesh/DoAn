@@ -19,7 +19,9 @@
 			<div class="header-user">
 				<div class="user-avt">
 					<div class="user-pane">
-						<div class="user__logo" style="background-image: url(/vendor/img/account-black.svg);"></div>
+						<div class="user__logo material-icons">
+							account_circle
+						</div>
 						<div class="arrow-down"></div>
 					</div>
 					<div class="user-silebar">

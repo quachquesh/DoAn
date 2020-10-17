@@ -9,8 +9,6 @@
 		echo "<title>Smart Sales Manager</title>";
 	} ?>
 	<link rel="icon" href="<?php echo base_url() ?>vendor/img/order-food-32.png">
-	
-	<link rel="stylesheet" href="<?php echo base_url(); ?>vendor/css/bootstrap.min.css">
 </head>
 <body>
 	<?php include 'header.php'?>
@@ -19,6 +17,5 @@
 
 	<?php include 'footer.php'?>
 	<script type="text/javascript" src="<?php echo base_url(); ?>vendor/js/jquery-3.5.1.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url(); ?>vendor/js/bootstrap.min.js"></script>
 </body>
 </html>

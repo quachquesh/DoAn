@@ -11,7 +11,7 @@ class MenuManager extends CI_Model {
 	}
 	public function createProduct($data)
 	{
-		$this->db->insert('menu', $data);
+		$this->db->insert('product', $data);
 		return $this->db->insert_id();
 	}
 
@@ -21,18 +21,41 @@ class MenuManager extends CI_Model {
 			'avt' => $avt
 		);
 		$this->db->where('id', $id);
-		return $this->db->update('menu', $data);
+		return $this->db->update('product', $data);
 	}
 
 	public function deleteProduct($id)
 	{
 		$this->db->where('id', $id);
-		return $this->db->delete('menu');
+		return $this->db->delete('product');
 	}
+
+	public function deleteProductByTypeCode($typeCode)
+	{
+		$this->db->where('typeCode', $typeCode);
+		return $this->db->delete('product');
+	}
+
 	public function updateProductById($id, $data)
 	{
 		$this->db->where('id', $id);
-		return $this->db->update('menu', $data);
+		return $this->db->update('product', $data);
+	}
+
+	// Product Type
+	public function createProductType($data)
+	{
+		return $this->db->insert('product_type', $data);
+	}
+	public function updateProductType($code, $data)
+	{
+		$this->db->where('code', $code);
+		return $this->db->update('product_type', $data);
+	}
+	public function deleteProductType($code)
+	{
+		$this->db->where('code', $code);
+		return $this->db->delete('product_type');
 	}
 }
 

@@ -14,10 +14,10 @@ class DashBoard extends CI_Controller {
 	public function index()
 	{
 		$method = $this->input->server('REQUEST_METHOD');
-		if ($method == 'PUT') {
+		if ($method == 'GET') {
 			$this->load->view('admin/dashboard_view');
 
-			$this->output->set_status_header(201);
+			$this->output->set_status_header(200);
 		} else {
 			$this->output->set_status_header(500);
 		}

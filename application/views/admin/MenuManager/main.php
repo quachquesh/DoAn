@@ -1,6 +1,6 @@
 <div class="inner__header">
 	<div class="inner__title-icon">
-		<div class="icon-img" style="background-image: url(/vendor/img/restaurant_menu-black-18dp.svg);"></div>
+		<div class="icon-img material-icons">restaurant_menu</div>
 	</div>
 	<div class="inner__header-text">
 		<div class="inner__header-text-title">
@@ -40,7 +40,7 @@
 			if (bodyElement.getAttribute('data-body') != elID) {
 				$.ajax({
 					url: '/api/admin/MenuManager/'+elID,
-					type: 'PUT',
+					type: 'GET',
 					dataType: 'html'
 				})
 				.done(function(data) {

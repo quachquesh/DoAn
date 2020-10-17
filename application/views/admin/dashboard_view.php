@@ -1,6 +1,6 @@
 <div class="inner__header">
 	<div class="inner__title-icon">
-		<div class="icon-img" style="background-image: url(/vendor/img/dashboard-black-18dp.svg);"></div>
+		<div class="icon-img material-icons">dashboard</div>
 	</div>
 	<div class="inner__header-text">
 		<div class="inner__header-text-title">
@@ -22,3 +22,7 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	
+</script>

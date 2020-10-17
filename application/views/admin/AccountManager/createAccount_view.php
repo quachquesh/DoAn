@@ -95,14 +95,14 @@
 		})
 		.done(function(data) {
 			if (data.status == true) {
-				ShowMsgBox('Thành công!', 'Thêm tài khoản <b>thành công</b>', 'OK', 'success');
+				ShowMsgModal('Thành công!', 'Thêm tài khoản <b>thành công</b>', 4);
 				formElement.querySelectorAll('input[name]').forEach( function(element) {
 					element.value = "";
 				});
 				formElement.querySelector('select[name="level"] option').selected = 'selected';
 			}
 			else
-				ShowMsgBox('Lỗi!', data.message, 'OK', 'fail');
+				ShowMsgModal('Lỗi!', data.message, 4, 'danger');
 		})
 		.fail(function() {
 			ShowMsgBox('Thất bại!', 'Tên đăng nhập <b>đã tồn tại</b>', 'OK', 'fail');

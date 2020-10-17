@@ -77,7 +77,7 @@
 		            .done(function(res) {
 		            	if (res.status == true) {
 							// Hiện thông báo
-		            		ShowMsgBox('Thành công!', 'Thêm <b>' + formElement.querySelector('input[name="name"]').value +'</b> thành công', 'OK', 'success');
+		            		ShowMsgModal('Thành công!', 'Thêm <b>' + formElement.querySelector('input[name="name"]').value +'</b> thành công', 4, 'success');
 		            		
 		            		// reset value input
 		            		formElement.querySelectorAll('input[name]').forEach( function(element) {
@@ -89,7 +89,7 @@
 		            	}
 		            })
 		            .fail(function() {
-		            	ShowMsgBox('Thất bại!', 'Tên sản phẩm <b>đã tồn tại</b>', 'OK', 'fail');
+		            	ShowMsgModal('Thất bại!', 'Tên sản phẩm <b>đã tồn tại</b>', 4, 'danger');
 		            })
 		            .always(function() {
 		            	// console.log("complete");
@@ -98,8 +98,8 @@
             		ShowMsgBox('Lỗi!', res.message, 'OK', 'fail');
             	}
 			})
-			.always(function() {
-            	ShowMsgBox('Thất bại!', 'Tên sản phẩm <b>đã tồn tại</b>', 'OK', 'fail');
+			.fail(function() {
+            	ShowMsgModal('Thất bại!', 'Tên sản phẩm <b>đã tồn tại</b>', 4, 'danger');
             });
         } else {
     		ShowMsgBox('Lỗi!', 'Chỉ được upload ảnh', 'OK', 'fail');
