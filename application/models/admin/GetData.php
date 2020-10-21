@@ -25,10 +25,25 @@ class GetData extends CI_Model {
 		return $this->db->get('product')->result_array();
 	}
 
+	public function getProductAvtByType($type)
+	{
+		$this->db->select('avt');
+		$this->db->where('typeCode', $type);
+		return $this->db->get('product')->result_array();
+	}
+
 	public function getProductType()
 	{
 		$this->db->select('*');
 		return $this->db->get('product_type')->result_array();
+	}
+
+	public function getStore($code = -1)
+	{
+	    $this->db->select('*');
+	    if ($code != -1)
+	    	$this->db->where('code', $code);
+	    return $this->db->get('stores')->result_array();
 	}
 }
 

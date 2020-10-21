@@ -10,8 +10,12 @@
 			<div class="card-body">
 				<ul class="product-list">
 					<?php foreach ($productType as $valueType): ?>
-						<?php if ($valueType['business'] != 0): ?>
-						<div class="label-group" data-typeCode="<?php echo $valueType['code'] ?>">
+						<?php if ($valueType['business'] == 0)
+							$style = 'red-color';
+						else
+							$style = '';
+						?>
+						<div class="label-group <?php echo $style; ?>" data-typeCode="<?php echo $valueType['code'] ?>">
 							<span><?php echo $valueType['typeName'] ?></span>
 						</div>
 						<?php foreach ($menuData as $value): ?>
@@ -60,10 +64,12 @@
 						</li>
 						<?php endif ?>
 						<?php endforeach ?>
-						<?php endif ?>
 					<?php endforeach ?>
 				</ul>
 			</div>
+		</div>
+		<div class="col c-12 m-12 l-12 test">
+			<div class="test-overlay"></div>
 		</div>
 	</div>
 </div>
@@ -152,9 +158,11 @@
 <script defer>
 	document.querySelector('.edit-product .overlay').addEventListener('click', function() {
 		document.querySelector('.edit-product').classList.add('hidden');
+		document.querySelector('body').style.overflow = 'unset';
 	})
 	document.querySelector('.edit-product .close-tab').addEventListener('click', function() {
 		document.querySelector('.edit-product').classList.add('hidden');
+		document.querySelector('body').style.overflow = 'unset';
 	})
 
 	var formUpdate = document.getElementById('form-update-product');
@@ -241,6 +249,7 @@
 		})
 		.always(function() {
 			document.querySelector('.edit-product').classList.add('hidden');
+			document.querySelector('body').style.overflow = 'unset';
 		});
 		
 	})
@@ -356,7 +365,7 @@
 		editData.id = productID;
 		editData.element = element.parentElement.parentElement;
 		$.ajax({
-			url: '/api/admin/MenuManager/getMenuData/'+productID,
+			url: '/api/admin/menu/product/id/'+productID,
 			type: 'GET',
 			dataType: 'json'
 		})
@@ -402,6 +411,7 @@
 
 			});
 			document.querySelector('.edit-product').classList.remove('hidden');
+			document.querySelector('body').style.overflow = 'hidden';
 		});
 	};
 

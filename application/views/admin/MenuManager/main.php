@@ -39,7 +39,7 @@
 			var el = this;
 			if (bodyElement.getAttribute('data-body') != elID) {
 				$.ajax({
-					url: '/api/admin/MenuManager/'+elID,
+					url: '/admin/MenuManager/'+elID,
 					type: 'GET',
 					dataType: 'html'
 				})

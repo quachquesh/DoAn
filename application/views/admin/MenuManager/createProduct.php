@@ -83,7 +83,7 @@
 		            		formElement.querySelectorAll('input[name]').forEach( function(element) {
 								element.value = "";
 							});
-							formElement.querySelector('select[name="typeCode"] option').selected = 'selected';
+							// formElement.querySelector('select[name="typeCode"] option').selected = 'selected';
 		            	} else {
 		            		ShowMsgBox('Lỗi!', res.message, 'OK', 'fail');
 		            	}

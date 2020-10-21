@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			if (appMainBody.getAttribute('data-inner') != elID) {
 				document.querySelector('.loading-app-main').classList.remove('hidden');
 				$.ajax({
-					url: '/api/admin/'+elID,
+					url: '/admin/'+elID,
 					type: 'GET',
 					dataType: 'html'
 				})

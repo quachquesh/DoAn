@@ -29,7 +29,17 @@
 				</div>
 			</li>
 			<?php endif ?>
+			<!-- qr code -->
 			<li>
+				<div id="QrCode" class="nav-menu__title slidebar-btn">
+					<div  class="nav-menu__title-name">
+						<div class="icon-menu material-icons">qr_code_2</div>
+						<span>QR Code</span>
+					</div>
+				</div>
+			</li>
+
+			<!-- <li>
 				<div class="nav-menu__title dropdown-mm">
 					<div class="nav-menu__title-name">
 						<div class="icon-menu material-icons">menu_book</div>
@@ -132,7 +142,7 @@
 						<li><a>mini menu 3</a></li>
 					</ul>
 				</div>
-			</li>
+			</li> -->
 		</ul>
 	</div>
 </div>

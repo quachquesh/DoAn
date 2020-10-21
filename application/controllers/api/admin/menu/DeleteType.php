@@ -10,6 +10,7 @@ class DeleteType extends CI_Controller {
 			exit();
 		} else {
 			$this->load->model('admin/MenuManager');
+			$this->load->model('admin/GetData');
 		}
 	}
 
@@ -19,7 +20,11 @@ class DeleteType extends CI_Controller {
 		if ($method == 'POST') {
 			$code = $this->input->post('code');
 
-			if ($this->MenuManager->deleteProductByTypeCode($code) && $this->MenuManager->deleteProductType($code)) {
+			$arrAvt = $this->GetData->getProductAvtByType($code);
+			if ($this->MenuManager->deleteProductType($code)) {
+				foreach ($arrAvt as $value) {
+				    unlink($value['avt']);
+				}
 				$res['status'] = true;
 				$res['message'] = 'Xóa <b style="text-transform: uppercase;">'.$code.'</b> thành công';
 			} else {
