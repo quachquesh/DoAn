@@ -60,9 +60,6 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/vendor/js/msgBox.js"></script>
-<script type="text/javascript" src="/vendor/js/qrcode.min.js"></script>
-
 <script>
 	var qrcode = new QRCode(document.getElementById("qrcode-result"), {
 		width: 149,
@@ -78,7 +75,7 @@
 		var code = form.querySelector('select[name="code"]').value;
 		var numberTable = form.querySelector('input[name="numberTable"]').value;
 		qrcode.clear();
-		qrcode.makeCode('<?php echo base_url() ?>order?StoreID='+code+'&TableID='+numberTable);
+		qrcode.makeCode('<?php echo base_url() ?>order?StoreId='+code+'&TableId='+numberTable);
 		ShowMsgModal('Thông báo', 'Đã tạo QR Code', 2, 'info');
 	})
 </script>

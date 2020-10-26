@@ -10,7 +10,7 @@ class Order extends CI_Controller {
 
 	public function index()
 	{
-		$store = $this->GetData->getStore($_GET['StoreID']);
+		$store = $this->GetData->getStore($_GET['StoreId']);
 
 		if ($store) {
 			$product = $this->GetData->getProduct();
@@ -20,8 +20,11 @@ class Order extends CI_Controller {
 				'product' => $product,
 				'productType' => $productType,
 				'store' => $store,
-				'table' => $_GET['TableID'],
+				'table' => $_GET['TableId'],
 			);
+			if (isset($_GET['errorCode']) && isset($_GET['orderType'])) {
+				$data['momo'] = $this->input->get();
+			}
 			$this->load->view('order', $data, false);
 		} else {
 			$this->output->set_status_header(500);

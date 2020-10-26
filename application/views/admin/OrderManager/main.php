@@ -1,30 +1,27 @@
 <div class="inner__header">
 	<div class="inner__title-icon">
-		<div class="icon-img material-icons">restaurant_menu</div>
+		<div class="icon-img material-icons">list_alt</div>
 	</div>
 	<div class="inner__header-text">
 		<div class="inner__header-text-title">
-			Quản lý sản phẩm
+			Quản lý đơn đặt hàng
 		</div>
 		<div class="inner__header-text-content">
-			Quản lý và thay đổi thông tin các sản phẩm
+			Quản lý các đơn đặt hàng
 		</div>
 	</div>
 </div>
 <div class="inner__button">
-	<div id="CreateProduct" class="btn-load-page btn btn-trans active">
-		Thêm sản phẩm
+	<div id="OrderWait" class="btn-load-page btn btn-trans active">
+		Chưa thanh toán
 	</div>
-	<div id="ShowProductType" class="btn-load-page btn btn-trans">
-		Loại sản phẩm
-	</div>
-	<div id="ShowProduct" class="btn-load-page btn btn-trans">
-		Sản phẩm
+	<div id="OrderDone" class="btn-load-page btn btn-trans">
+		Đã thanh toán
 	</div>
 </div>
-<div id="inner__body" class="inner__body row" data-body="CreateProduct">
+<div id="inner__body" class="inner__body row" data-body="OrderWait">
 	<!-- include main -->
-	<?php include "createProduct.php" ?>
+	<?php include "orderWait.php" ?>
 
 </div>
 
@@ -39,7 +36,7 @@
 			var el = this;
 			if (bodyElement.getAttribute('data-body') != elID) {
 				$.ajax({
-					url: '/admin/MenuManager/'+elID,
+					url: '/admin/OrderManager/'+elID,
 					type: 'GET',
 					dataType: 'html'
 				})

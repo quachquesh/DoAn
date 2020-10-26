@@ -19,12 +19,22 @@
 				</div>
 			</li>
 			<?php endif ?>
-			<?php if ($this->session->userdata('menuManager')): ?>
+			<?php if ($this->session->userdata('productManager')): ?>
 			<li>
-				<div id="MenuManager" class="nav-menu__title slidebar-btn">
+				<div id="ProductManager" class="nav-menu__title slidebar-btn">
 					<div  class="nav-menu__title-name">
 						<div class="icon-menu material-icons">restaurant_menu</div>
 						<span>Quản lý sản phẩm</span>
+					</div>
+				</div>
+			</li>
+			<?php endif ?>
+			<?php if ($this->session->userdata('orderManager')): ?>
+			<li>
+				<div id="OrderManager" class="nav-menu__title slidebar-btn">
+					<div  class="nav-menu__title-name">
+						<div class="icon-menu material-icons">list_alt</div>
+						<span>Đơn đặt hàng</span>
 					</div>
 				</div>
 			</li>

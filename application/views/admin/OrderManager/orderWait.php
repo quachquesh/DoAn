@@ -1,0 +1,150 @@
+<div class="col c-12 m-12 l-12">
+	<div class="inner__body-card row no-gutters card card-block">
+		<div class="col c-12 m-10 m-o-1 l-8 l-o-2">
+			<div class="card-body">
+				<table class="list-order" id="order-offline">
+					<tr>
+						<th style="text-align: center">ID</th>
+						<th style="text-align: center">Giá</th>
+						<th style="text-align: center">Bàn</th>
+						<th style="text-align: center"></th>
+					</tr>
+					<?php foreach ($data as $key => $value): ?>
+					<tr>
+						<td class="order-id"><?php echo $value['id'] ?></td>
+						<?php $value['price'] = number_format($value['price'], 0, ',', '.'); ?>
+						<td class="order-price"><?php echo $value['price'] ?></td>
+						<td class="order-table"><?php echo $value['tableId'] ?></td>
+						<td class="btn-done order-btn">
+							<span class="material-icons info" style="background-color: #2973D7;">info</span>
+							<span class="material-icons done">done</span>
+							<span class="material-icons remove" style="background-color: #EF5350;">delete_forever</span>
+						</td>
+					</tr>
+					<?php endforeach ?>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	document.querySelectorAll('.list-order .btn-done .done').forEach( function(element) {
+		element.onclick = function() {
+			var parentElement = this.parentElement.parentElement;
+			OrderOffline(parentElement, 'POST');
+		}
+	});
+
+	document.querySelectorAll('.list-order .btn-done .remove').forEach( function(element) {
+		element.onclick = function() {
+			var parentElement = this.parentElement.parentElement;
+			var id = parentElement.querySelector('.order-id').innerText;
+			ShowQuestionBox('Bạn chắc chắn muốn xóa đơn hàng <b>'+id+'</b>?', function() {
+				OrderOffline(parentElement, 'DELETE')
+			});
+		}
+	});
+
+	function OrderOffline(parentElement, method) {
+		var id = parentElement.querySelector('.order-id').innerText;
+		$.ajax({
+			url: '/api/Admin/orderOffline/'+id,
+			type: method,
+			dataType: 'json'
+		})
+		.done(function(data) {
+			if (data.status) {
+				parentElement.remove();
+				ShowMsgModal('Thành công', data.message);
+			} else {
+				ShowMsgModal('Thất bại', data.message, 3, 'danger');
+			}
+		})
+		.fail(function() {
+			ShowMsgModal('Lỗi', 'Kiểm tra kết nối mạng', 3, 'danger');
+		})
+		.always(function() {
+			// console.log("complete");
+		});
+	}
+
+
+
+	<?php $lastID = count($data) != 0 ? end($data)['id'] : 0; ?>
+	var lastID = <?php echo $lastID ?>;
+	window.orderOfflineRealTime = setInterval(function() {
+		if (!document.getElementById('order-offline')) {
+			window.clearInterval(window.orderOfflineRealTime);
+			return false;
+		}
+		$.ajax({
+			url: '/api/Admin/orderOffline',
+			type: 'GET',
+			dataType: 'json'
+		})
+		.done(function(data) {
+			var result = data.filter(function(value) {
+				return value['id'] > lastID;
+			});
+
+			result.forEach( function(value) {
+				var price = formatMoney(value.price);
+				var html = '<tr>';
+					html += `<td class="order-id">${value.id}</td>`;
+					html += `<td class="order-price">${price}</td>`;
+					html += `<td class="order-table">${value.tableId}</td>`;
+					html += `<td class="btn-done order-btn">`;
+					html += `<span class="material-icons info" style="background-color: #2973D7;">info</span>`;
+					html += `<span class="material-icons done">done</span>`;
+					html += `<span class="material-icons remove" style="background-color: #EF5350;">delete_forever</span>`;
+					html += `</td>`;
+					html += `</tr>`;
+				$('#order-offline').append(html);
+
+				var element = document.querySelector('#order-offline tr:last-child');
+				element.querySelector('.btn-done .done').onclick = function() {
+					OrderOffline(element, 'POST');
+				}
+
+				element.querySelector('.btn-done .remove').onclick = function() {
+					var id = element.querySelector('.order-id').innerText;
+					ShowQuestionBox('Bạn chắc chắn muốn xóa đơn hàng <b>'+id+'</b>?', function() {
+						OrderOffline(element, 'DELETE')
+					});
+				}
+
+				lastID = value.id;
+			});
+		})
+		.fail(function() {
+			ShowMsgModal('Lỗi', 'Vui lòng kiểm tra kết nối mạng', 3, 'danger');
+		})
+	}, 2000)
+
+	function formatMoney(number) {
+	    number+='';
+	    var dem = 1;
+	    var temp = [];
+	    var length = number.length;
+	    var int = parseInt(number);
+	    for (i = 0; i < length; i++) {
+	        if (Math.floor(int/1000) > 0) {
+	            int = Math.floor(int/1000);
+	            temp.push(number.substring(length-(3*dem), length-(3*(dem-1))));
+	            dem++;
+	        } else {
+	            temp.push(int);
+	            break;
+	        }
+	    }
+	    var result = "";
+	    for (i = temp.length-1; i > -1; i--) {
+	        result += temp[i];
+	        if (i != 0) {
+	            result += ".";
+	        }
+	    }
+	    return result;
+	}
+</script>

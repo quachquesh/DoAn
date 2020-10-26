@@ -1,11 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class MenuManager extends CI_Controller {
+class ProductManager extends CI_Controller {
 
 	public function __construct()
 	{
 		parent::__construct();
-		if (!$this->session->has_userdata('menuManager')) {
+		if (!$this->session->has_userdata('productManager')) {
 			$this->output->set_status_header(500);
 			die();
 		} else {
@@ -17,16 +17,16 @@ class MenuManager extends CI_Controller {
 	{			
 		$data = $this->GetData->getProductType();
 
-		$data = array('menuType' => $data);
-		$this->load->view('admin/MenuManager/main', $data, FALSE);
+		$data = array('productType' => $data);
+		$this->load->view('admin/ProductManager/main', $data, FALSE);
 	}
 
 	public function CreateProduct()
 	{
 		$data = $this->GetData->getProductType();
 
-		$data = array('menuType' => $data);
-		$this->load->view('admin/MenuManager/createProduct', $data, FALSE);
+		$data = array('productType' => $data);
+		$this->load->view('admin/ProductManager/createProduct', $data, FALSE);
 	}
 
 	public function ShowProduct()
@@ -42,7 +42,7 @@ class MenuManager extends CI_Controller {
 			'menuData' => $data,
 			'productType' => $this->GetData->getProductType()
 		);
-		$this->load->view('admin/MenuManager/showProduct', $data, FALSE);
+		$this->load->view('admin/ProductManager/showProduct', $data, FALSE);
 	}
 
 	public function ShowProductType()
@@ -50,6 +50,6 @@ class MenuManager extends CI_Controller {
 		$data = array(
 			'productType' => $this->GetData->getProductType()
 		);
-		$this->load->view('admin/MenuManager/showProductType', $data, FALSE);
+		$this->load->view('admin/ProductManager/showProductType', $data, FALSE);
 	}
 }

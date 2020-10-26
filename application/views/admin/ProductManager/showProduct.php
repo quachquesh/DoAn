@@ -186,8 +186,10 @@
 		form_data.append('image-src', editData.image);
 		form_data.append('image-update', formUpdate.querySelector('#fileAvt').value);
 
+		var productID = this.querySelector('input[name="productID"]').value;
+
 		$.ajax({
-			url: '/api/admin/menu/UpdateProduct',
+			url: '/api/Admin/product/'+productID,
 			type: 'POST',
 			dataType: 'json',
 			processData: false,
@@ -306,6 +308,7 @@
 	}
 
 	function formatMoney(number) {
+		number+='';
 		var dem = 1;
 		var temp = [];
 		var length = number.length;
@@ -365,53 +368,55 @@
 		editData.id = productID;
 		editData.element = element.parentElement.parentElement;
 		$.ajax({
-			url: '/api/admin/menu/product/id/'+productID,
+			url: '/api/Admin/product/'+productID,
 			type: 'GET',
 			dataType: 'json'
 		})
 		.done(function(data) {
-			formUpdate.querySelector('input[name="productID"]').value = data.id;
-			formUpdate.querySelector('input[name="name"]').value = data.name;
-			formUpdate.querySelector('.img-preview').setAttribute('src', data.avt);
-			editData.image = data.avt;
-			formUpdate.querySelector('input[name="price"]').value = data.price;
-			formUpdate.querySelector('input[name="discount"]').value = data.discount;
-			formUpdate.querySelector('#fileAvt').value = "";
+			if (typeof data.status === 'undefined') {
+				formUpdate.querySelector('input[name="productID"]').value = data.id;
+				formUpdate.querySelector('input[name="name"]').value = data.name;
+				formUpdate.querySelector('.img-preview').setAttribute('src', data.avt);
+				editData.image = data.avt;
+				formUpdate.querySelector('input[name="price"]').value = data.price;
+				formUpdate.querySelector('input[name="discount"]').value = data.discount;
+				formUpdate.querySelector('#fileAvt').value = "";
 
-			formUpdate.querySelectorAll('select[name="typeCode"] option').forEach( function(element) {
-				if (element.value == data.typeCode) {
-					element.selected = true;
-					editData.typeCode = data.typeCode;
-				} else {
-					element.removeAttribute('selected');
-				}
-			});
-			formUpdate.querySelectorAll('select[name="itemsNew"] option').forEach( function(element) {
-				if (element.value == data.itemsNew) {
-					element.selected = true;
-				} else {
-					element.removeAttribute('selected');
-				}
+				formUpdate.querySelectorAll('select[name="typeCode"] option').forEach( function(element) {
+					if (element.value == data.typeCode) {
+						element.selected = true;
+						editData.typeCode = data.typeCode;
+					} else {
+						element.removeAttribute('selected');
+					}
+				});
+				formUpdate.querySelectorAll('select[name="itemsNew"] option').forEach( function(element) {
+					if (element.value == data.itemsNew) {
+						element.selected = true;
+					} else {
+						element.removeAttribute('selected');
+					}
 
-			});
-			formUpdate.querySelectorAll('select[name="bestSeller"] option').forEach( function(element) {
-				if (element.value == data.bestSeller) {
-					element.selected = true;
-				} else {
-					element.removeAttribute('selected');
-				}
+				});
+				formUpdate.querySelectorAll('select[name="bestSeller"] option').forEach( function(element) {
+					if (element.value == data.bestSeller) {
+						element.selected = true;
+					} else {
+						element.removeAttribute('selected');
+					}
 
-			});
-			formUpdate.querySelectorAll('select[name="discountType"] option').forEach( function(element) {
-				if (element.value == data.discountType) {
-					element.selected = true;
-				} else {
-					element.removeAttribute('selected');
-				}
+				});
+				formUpdate.querySelectorAll('select[name="discountType"] option').forEach( function(element) {
+					if (element.value == data.discountType) {
+						element.selected = true;
+					} else {
+						element.removeAttribute('selected');
+					}
 
-			});
-			document.querySelector('.edit-product').classList.remove('hidden');
-			document.querySelector('body').style.overflow = 'hidden';
+				});
+				document.querySelector('.edit-product').classList.remove('hidden');
+				document.querySelector('body').style.overflow = 'hidden';
+			}
 		});
 	};
 
@@ -419,10 +424,9 @@
 		var productID = element.getAttribute('data-id');
 		var parentElement = element.parentElement.parentElement;
 		$.ajax({
-			url: '/api/admin/menu/DeleteProduct',
-			type: 'POST',
-			dataType: 'json',
-			data: {'product-id': productID},
+			url: '/api/Admin/product/'+productID,
+			type: 'DELETE',
+			dataType: 'json'
 		})
 		.done(function(data) {
 			if (data.status == true) {

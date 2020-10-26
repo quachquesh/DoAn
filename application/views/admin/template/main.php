@@ -55,6 +55,7 @@
 	<script  type="text/javascript" src="/vendor/js/jquery-3.5.1.min.js"></script>
 	<script  type="text/javascript" src="/vendor/js/app-admin.js"></script>
 	<script  type="text/javascript" src="/vendor/js/msgBox.js"></script>
+	<script  type="text/javascript" src="/vendor/js/qrcode.min.js"></script>
 
 	<script>
 		document.querySelector('.icon-img').onclick = function() {

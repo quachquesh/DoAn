@@ -88,7 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			this.classList.add('active');
 		})
 	})
-
+	$.ajaxPrefilter(function(options, original_Options, jqXHR) { 
+	    options.async = true; 
+	}); 
 
 	var appMainBody = document.getElementById('app-main__inner');
 	document.querySelectorAll('.nav-menu__title.slidebar-btn').forEach( function(element, index) {
@@ -114,7 +116,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		})
 	});
-
 
 	// document.addEventListener("load", function(){
  //    	document.querySelector('.loading-page').classList.add('hidden');

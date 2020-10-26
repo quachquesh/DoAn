@@ -37,6 +37,7 @@
 </div>
 
 <script>
+	// click để hiện sửa
 	document.querySelectorAll('#show-product-type tr:nth-child(n+2)').forEach( function(element) {
 		element.addEventListener('dblclick', function() {
 			fEdit(this);
@@ -68,6 +69,7 @@
 		element.querySelector('.btn-delete').style.display = 'none';
 	}
 
+	// Sửa loại sản phẩm
 	document.querySelectorAll('#show-product-type .btn-apply').forEach( function(element) {
 		element.addEventListener('click', function(e) {
 			e.stopPropagation();
@@ -84,14 +86,14 @@
 	function editApply(element) {
 		var parentElement = element.parentElement.parentElement;
 
+		var code = parentElement.querySelector('.btn-group').getAttribute('data-typeCode');
 		var typeNameValue = parentElement.querySelector('.typeName input').value;
 		var businessValue = parentElement.querySelector('.business select').value;
 		$.ajax({
-			url: '/api/admin/menu/UpdateType',
+			url: '/api/Admin/productType/'+code,
 			type: 'POST',
 			dataType: 'json',
 			data: {
-				code: parentElement.querySelector('.btn-group').getAttribute('data-typeCode'),
 				typeName: typeNameValue,
 				business: businessValue
 			},
@@ -162,31 +164,11 @@
 		parentElement.querySelector('.btn-delete').style.display = 'block';
 	}
 
+	// Xóa sản phẩm
 	document.querySelectorAll('#show-product-type .btn-delete').forEach( function(element) {
 		element.addEventListener('click', function(e) {
 			e.stopPropagation();
-			var element = this;
-			ShowQuestionBox('Hành động này sẽ xóa toàn bộ sản phẩm thuộc loại này, bạn có chắc chắn muốn xóa?', function() {
-				var code = element.parentElement.getAttribute('data-typeCode');
-
-				$.ajax({
-					url: '/api/admin/menu/DeleteType',
-					type: 'POST',
-					dataType: 'json',
-					data: {code: code}
-				})
-				.done(function(data) {
-					if (data.status) {
-						element.parentElement.parentElement.remove();
-						ShowMsgModal('Thành công!', data.message, 4);
-					}
-					else
-						ShowMsgModal('Thất bại!', data.message, 4, 'danger');
-				})
-				.fail(function() {
-					ShowMsgModal('Lỗi!', 'Có lỗi xảy ra, vui lòng reload lại trang', 4, 'danger');
-				})
-			})
+			editDelete(this);
 		})
 		element.addEventListener('dblclick', function(e) {
 			e.stopPropagation();
@@ -196,6 +178,31 @@
 		})
 	});
 
+	function editDelete(element) {
+		var element = element;
+		ShowQuestionBox('Hành động này sẽ xóa toàn bộ sản phẩm thuộc loại <b>'+element.parentElement.getAttribute('data-typename')+'</b>, bạn có chắc chắn muốn xóa?', function() {
+			var code = element.parentElement.getAttribute('data-typeCode');
+
+			$.ajax({
+				url: '/api/Admin/productType/'+code,
+				type: 'DELETE',
+				dataType: 'json'
+			})
+			.done(function(data) {
+				if (data.status) {
+					element.parentElement.parentElement.remove();
+					ShowMsgModal('Thành công!', data.message, 4);
+				}
+				else
+					ShowMsgModal('Thất bại!', data.message, 4, 'danger');
+			})
+			.fail(function() {
+				ShowMsgModal('Lỗi!', 'Có lỗi xảy ra, vui lòng reload lại trang', 4, 'danger');
+			})
+		})
+	}
+
+	// Thêm loại sản phẩm
 	document.getElementById('btn-add-new').onclick = function() {
 		var html = '<tr>';
 			html += '<td style="padding: 5px"><input type="text"></td>';
@@ -221,7 +228,7 @@
 			var business = element.querySelector('td.business select').value;
 
 			$.ajax({
-				url: '/api/admin/menu/CreateType',
+				url: '/api/Admin/productType',
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -290,6 +297,16 @@
 					})
 
 					// button Delete
+					btnDelete.onclick = function(e) {
+						e.stopPropagation();
+						editDelete(this);
+					}
+					btnDelete.addEventListener('dblclick', function(e) {
+						e.stopPropagation();
+					})
+					btnDelete.addEventListener('contextmenu', function(e) {
+						e.stopPropagation();
+					})
 
 					ShowMsgModal('Thành công!', data.message, 4);
 				} else {

@@ -17,15 +17,18 @@
                     <img class = "iconlink-logo"src="/vendor/img/logo.png" alt="">
                     <span class ="iconlink-name">SSM</span>
                 </a>
-                <div class="header_navbar-contactlink material-icons">shopping_cart</div>
+                <div class="header_navbar-cart">
+                    <span class="cart-icon material-icons-outlined">shopping_cart</span>
+                    <span class="cart-amount">0</span>
+                </div>
             </div>
         </div>
     </header>
 
     <div class="container">
-        <div class="container-review">
+        <div id="address" class="container-review" data-table="<?php echo $table ?>" data-store="<?php echo $store['code'] ?>">
             <img class="review-picture" src="<?php echo $store['avt'] ?>" alt="">
-            <span class="review-id">Số bàn: <?php echo $table ?></span>
+            <span class="review-id">Bàn: <?php echo $table ?></span>
             <div class="review-address-box">
                 <span class="review-address">Địa chỉ: <?php echo $store['address'] ?></span>
             </div>
@@ -42,6 +45,7 @@
                 <?php foreach ($product as $value): ?>
                 <?php if ($valueType['code'] == $value['typeCode']): ?>
                 <div class="product">
+                    <div class="product-id" hidden><?php echo $value['id'] ?></div>
                     <div class="product-picture">
                         <img src="<?php echo $value['avt']; ?>" alt="" loading="lazy">
                         <?php if ($value['itemsNew'] != 0): ?>
@@ -91,11 +95,326 @@
             <?php endif ?>
             <?php endforeach ?>
         </div>
-        <!-- <div class ="cart-outer">
+        <div class="cart-outer">
             <div class="container-cart">
-                <i class="material-icons">shopping_cart</i> Không có sản phẩm nào                    
+                <i class="material-icons-outlined" style="margin-right: 8px;">shopping_cart</i>Có <span class="cart-amount" style="margin: 0px 4px;">0</span> sản phẩm trong giỏ hàng               
             </div>
-        </div> -->
+        </div>
+
     </div>
+
+    <div class="cart-main hidden">
+        <div class="cart-box">
+            <div class="cart-header">
+                <span class="btn-back material-icons">arrow_back</span>
+                <h4 class="title">Giỏ hàng</h4>
+            </div>
+            <div class="cart-body">
+                <ul class="cart-list"></ul>
+                <div class="cart-price-all"><b style="margin-right: 15px;">TỔNG:</b>0 Đ</div>
+                <div class="cart-coupon">
+                    <input type="text" placeholder="Mã giảm giá">
+                    <div class="btn-apply-coupon">Áp dụng</div>
+                </div>
+                <div class="cart-price-discount">Khuyến mãi: <i style="margin-left: 15px;">0</i> Đ</div>
+                <div class="cart-price-pay"><b style="margin-right: 15px;">THANH TOÁN:</b>0 Đ</div>
+            </div>
+            <div class="cart-note">
+                <span>Ghi chú:</span>
+                <div class="textarea">
+                    <textarea rows="3" placeholder="Ghi lưu ý cho nhân viên"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="pay-group">
+            <div class="btn-pay-online">Thanh toán online</div>
+            <div class="btn-pay-offline">Thanh toán tiền mặt</div>
+        </div>
+    </div>
+
+    <div class="message-box" id="message-box">
+        <div class="message-box__overlay"></div>
+        <div class="message-body">
+            <h2 class="message-body__title"></h2>
+            <div class="message-body__content"></div>
+            <div class="message-body__button btn"></div>
+        </div>
+    </div>
+
+    <script  type="text/javascript" src="/vendor/js/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="/vendor/js/msgBox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.8.2/forge.all.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded",function(){
+            var urlMomo = 'https://test-payment.momo.vn/gw_payment/transactionProcessor';
+            // Giỏ hàng {'product-id': 'amount'}
+            var cart = {};
+            var cartProduct = new Array();
+            var cartPrice_old = 0;
+            var cartPrice_discount = 0;
+            var cartPrice_current = 0;
+            // Số lượng giỏ hàng
+            var amountAll = 0;
+            var cartHeaderElement = document.querySelector('.header_navbar-cart');
+            var cartHAmount = cartHeaderElement.querySelector('.cart-amount');
+            var cartBottomElement = document.querySelector('.cart-outer');
+            var cartBAmount = cartBottomElement.querySelector('.cart-amount');
+            var cartElement = document.querySelector('.cart-main');
+
+            document.querySelectorAll('.product').forEach( function(element) {
+                // click Thêm sản phẩm
+                element.querySelector('.product-add').onclick = function() {
+                    this.style.display = 'none';
+                    element.querySelector('.amount-groups').style.display = 'flex';
+
+                    cart[element.querySelector('.product-id').innerText] = 1;
+                    amountAll += 1;
+                    cartHAmount.innerText = amountAll;
+                    cartBAmount.innerText = amountAll;
+                    cartBottomElement.style.display = 'flex';
+                }
+
+                // Click trừ số lượng
+                element.querySelector('.amount-sub').onclick = function() {
+                    cart[element.querySelector('.product-id').innerText] -= 1;
+                    amountAll -= 1;
+                    cartHAmount.innerText = amountAll;
+                    cartBAmount.innerText = amountAll;
+                    if (amountAll < 1) {
+                        cartBottomElement.style.display = 'none';
+                    }
+                    if (cart[element.querySelector('.product-id').innerText] < 1) {
+                        this.parentElement.style.display = 'none';
+                        element.querySelector('.product-add').style.display = 'flex';
+                        delete cart[element.querySelector('.product-id').innerText];
+                    } else {
+                        element.querySelector('.amount-number').innerText = cart[element.querySelector('.product-id').innerText];
+                    }
+                }
+                // Click thêm số lượng
+                element.querySelector('.amount-sum').onclick = function() {
+                    cart[element.querySelector('.product-id').innerText] += 1;
+                    amountAll += 1;
+                    cartHAmount.innerText = amountAll;
+                    cartBAmount.innerText = amountAll;
+                    element.querySelector('.amount-number').innerText = cart[element.querySelector('.product-id').innerText];
+                }
+            });
+
+            // click giỏ hàng
+            document.querySelector('.header_navbar-cart').onclick = function() {
+                fCart();
+            }
+
+            document.querySelector('.container-cart').onclick = function() {
+                fCart();
+            }
+
+            function fCart() {
+                if (amountAll > 0) {
+                    $.ajax({
+                        url: '/api/V1/product',
+                        type: 'GET',
+                        dataType: 'json'
+                    })
+                    .done(function(data) {
+                        cartProduct = [];
+                        cartPrice_old = 0;
+                        cartElement.querySelector('ul').innerHTML = "";
+                        for (value in cart) {
+                            data.forEach( function(val) {
+                                if (value == val['id']) {
+                                    val['amount'] = cart[value];
+                                    cartProduct.push(val);
+                                }
+                            });
+                        }
+
+                        cartProduct.forEach( function(element) {
+                            var price = element['price'];
+                            if (element['discount'] != 0) {
+                                if (element['discountType'] == 0) { // Phần trăm
+                                    price = price/100*(100-element['discount']);
+                                } else { // Giá tiền
+                                    price = price-element['discount'];
+                                }
+                            }
+                            price = price*element['amount'];
+                            cartPrice_old += price;
+
+                            var html = '<li class="cart-items">';
+                                html += '<span class="items-amount"><span>'+element['amount']+'</span></span>';
+                                html += '<span class="items-content">'+element['name']+'</span>';
+                                html += '<span class="items-price">'+formatMoney(price)+'</span>';
+                                html += '</li>';
+                            cartElement.querySelector('ul').innerHTML += html;
+                        });
+
+                        cartPrice_current = cartPrice_old;
+                        cartElement.querySelector('.cart-price-all').innerHTML = '<b style="margin-right: 15px;">TỔNG:</b>'+formatMoney(cartPrice_old)+' Đ'
+                        cartElement.querySelector('.cart-price-discount i').innerText = '0';
+                        cartElement.querySelector('.cart-price-pay').innerHTML = '<b style="margin-right: 15px;">THANH TOÁN:</b>'+formatMoney(cartPrice_current)+' Đ';
+                    })                    
+
+                    cartElement.classList.remove('hidden');
+                    document.querySelector('body').style.overflowY = 'hidden';
+                }
+            }
+
+            // click nút quay lại trên giỏ hàng
+            document.querySelector('.cart-main .btn-back').onclick = function() {
+                cartElement.classList.add('hidden');
+                document.querySelector('body').style.overflowY = 'scroll';
+            }
+
+            // Thanh toán Online
+            document.querySelector('.btn-pay-online').onclick = function() {
+                var d = new Date();
+                var orderId = 'MM'+d.getTime();
+                $.ajax({
+                    url: '/api/Order/onlinePayment',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        id: orderId,
+                        product: cartProduct,
+                        price: cartPrice_current,
+                        note: cartElement.querySelector('textarea').value,
+                        table: document.getElementById('address').getAttribute('data-table'),
+                        store: document.getElementById('address').getAttribute('data-store')
+                    },
+                })
+                .done(function(data) {
+                    if (data.status) {
+                        var returnUrl = '<?php echo base_url(); ?>order?StoreId=<?php echo $store['code']; ?>&TableId=<?php echo $table; ?>';
+                        var data = `partnerCode=MOMOMAIA20201023&accessKey=QhKbvZbIzH3tmPIc&requestId=${orderId}&amount=${cartPrice_current}&orderId=${orderId}&orderInfo=Thanh toan hoa don&returnUrl=${returnUrl}&notifyUrl=${location.href}&extraData=Smart Sales Manager`;
+                        var hmac = forge.hmac.create();  
+                        hmac.start('sha256', "dlqrE3Jjn0a9DvoDOEfqu3lh60kwFicb");
+                        hmac.update(data);  
+                        var hashText = hmac.digest().toHex();
+                        var json = {"accessKey": "QhKbvZbIzH3tmPIc","partnerCode": "MOMOMAIA20201023","requestType": "captureMoMoWallet","notifyUrl": location.href, "returnUrl": returnUrl, "orderId": orderId, "amount": cartPrice_current+'', "orderInfo": "Thanh toan hoa don", "requestId": orderId+'', "extraData": "Smart Sales Manager", "signature": hashText+''};
+                        $.ajax({
+                            url: urlMomo,
+                            type: 'POST',
+                            dataType: 'json',
+                            data: JSON.stringify(json),
+                        })
+                        .done(function(data) {
+                            if (data.errorCode === 0) {
+                                location.href = data.payUrl;
+                            }
+                        })
+                    } else {
+                        ShowMsgBox('Thất bại', data.message, 'OK', 'fail');
+                    }
+                })
+                .fail(function() {
+                    ShowMsgBox('Lỗi', 'Kiểm tra kết nối mạng', 'OK', 'fail');
+                })
+            }
+
+            // Thanh toán Offline
+            document.querySelector('.btn-pay-offline').onclick = function() {
+                $.ajax({
+                    url: '/api/Order/offline',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        product: cartProduct,
+                        price: cartPrice_current,
+                        note: cartElement.querySelector('textarea').value,
+                        table: document.getElementById('address').getAttribute('data-table'),
+                        store: document.getElementById('address').getAttribute('data-store')
+                    },
+                })
+                .done(function(data) {
+                    if (data.status) {
+                        ShowMsgBox('Thành công', data.message, 'OK');
+                    } else {
+                        ShowMsgBox('Thất bại', data.message, 'OK', 'fail');
+                    }
+                })
+                .fail(function() {
+                    ShowMsgBox('Lỗi', 'Kiểm tra kết nối mạng', 'OK', 'fail');
+                })
+            }
+
+
+            // sử lý đã thanh toán
+            <?php if (isset($momo)): ?>
+                function checkPayment() {
+                    var data = `partnerCode=MOMOMAIA20201023&accessKey=QhKbvZbIzH3tmPIc&requestId=<?php echo $momo['requestId'] ?>&orderId=<?php echo $momo['orderId'] ?>&requestType=transactionStatus`;
+                    var hmac = forge.hmac.create();  
+                    hmac.start('sha256', "dlqrE3Jjn0a9DvoDOEfqu3lh60kwFicb");
+                    hmac.update(data);  
+                    var hashText = hmac.digest().toHex();
+                    var json = {
+                        "partnerCode": "MOMOMAIA20201023",
+                        "accessKey": "QhKbvZbIzH3tmPIc",
+                        "requestId": '<?php echo $momo['requestId'] ?>',
+                        "orderId": '<?php echo $momo['orderId'] ?>',
+                        "requestType": "transactionStatus",
+                        "signature": hashText+''};
+                    $.ajax({
+                        url: urlMomo,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: JSON.stringify(json),
+                    })
+                    .done(function(data) {
+                        if (data.errorCode === 0) {
+                            $.ajax({
+                                url: '/api/Order/online/'+data.orderId,
+                                type: 'POST',
+                                dataType: 'json'
+                            })
+                            .done(function(data) {
+                                if (data.status) {
+                                    ShowMsgBox('Thành công', data.message, 'OK');
+                                } else {
+                                    ShowMsgBox('Thất bại', data.message, 'OK', 'fail');
+                                }
+                            })
+                            .fail(function() {
+                                ShowMsgBox('Lỗi', 'Kiểm tra kết nối mạng', 'OK', 'fail');
+                            })
+                        }
+                    })
+                    .fail(function() {
+                        ShowMsgBox('Thất bại', 'Thanh toán thất bại', 'OK', 'fail');
+                    })
+                }
+                checkPayment();
+            <?php endif ?>
+
+        }, false);
+
+        function formatMoney(number) {
+            number+='';
+            var dem = 1;
+            var temp = [];
+            var length = number.length;
+            var int = parseInt(number);
+            for (i = 0; i < length; i++) {
+                if (Math.floor(int/1000) > 0) {
+                    int = Math.floor(int/1000);
+                    temp.push(number.substring(length-(3*dem), length-(3*(dem-1))));
+                    dem++;
+                } else {
+                    temp.push(int);
+                    break;
+                }
+            }
+            var result = "";
+            for (i = temp.length-1; i > -1; i--) {
+                result += temp[i];
+                if (i != 0) {
+                    result += ".";
+                }
+            }
+            return result;
+        }
+    </script>
 </body>
 </html>

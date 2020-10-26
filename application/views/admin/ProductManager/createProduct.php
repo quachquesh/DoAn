@@ -14,7 +14,7 @@
 						<label>Loại sản phẩm:</label>
 						<select name="typeCode">
 							<option value="">--- Chọn loại sản phẩm ---</option>
-							<?php foreach ($menuType as $value): ?>
+							<?php foreach ($productType as $value): ?>
 							<option value="<?php echo $value['code'] ?>"><?php echo $value['typeName'] ?></option>
 							<?php endforeach ?>
 						</select>
@@ -40,8 +40,9 @@
 	// Click thêm sản phẩm
 	document.getElementById('form-create-product').addEventListener('submit', function(e) {
 		e.preventDefault();
-		var form = $(this);
+		// var form = $(this);
 		var formElement = this;
+		var formData = new FormData(this);
 		// Gửi data nhập (không lấy dữ liệu file)
 		// Lấy ra files
         var file_data = $('#fileAvt').prop('files')[0];
@@ -55,45 +56,22 @@
         if (type == match[0] || type == match[1] || type == match[2] || type == match[3]) {
         	// Thêm sản phẩm
         	$.ajax({
-				url: '/api/admin/menu/CreateProduct',
+				url: '/api/Admin/product',
 				type: 'POST',
 				dataType: 'json',
-				data: form.serialize() + '&avt=' +document.getElementById('fileAvt').value,
+				processData: false,
+		        contentType: false,
+				data: formData,
 			})
 			.done(function(res){
 				if (res.status == true) {
-					// khởi tạo đối tượng form data
-	        		var form_data = new FormData();
-	        		form_data.append('file', file_data, res.avtName+'.'+duoi_file);
-	        		form_data.append('id', res.id);
-	        		$.ajax({
-		            	url: '/api/admin/menu/CreateProduct/UploadAvtProduct',
-		            	type: 'POST',
-		            	dataType: 'json',
-		            	processData: false,
-		            	contentType: false,
-		            	data: form_data
-		            })
-		            .done(function(res) {
-		            	if (res.status == true) {
-							// Hiện thông báo
-		            		ShowMsgModal('Thành công!', 'Thêm <b>' + formElement.querySelector('input[name="name"]').value +'</b> thành công', 4, 'success');
-		            		
-		            		// reset value input
-		            		formElement.querySelectorAll('input[name]').forEach( function(element) {
-								element.value = "";
-							});
-							// formElement.querySelector('select[name="typeCode"] option').selected = 'selected';
-		            	} else {
-		            		ShowMsgBox('Lỗi!', res.message, 'OK', 'fail');
-		            	}
-		            })
-		            .fail(function() {
-		            	ShowMsgModal('Thất bại!', 'Tên sản phẩm <b>đã tồn tại</b>', 4, 'danger');
-		            })
-		            .always(function() {
-		            	// console.log("complete");
-		            });
+					ShowMsgModal('Thành công!', 'Thêm <b>' + formElement.querySelector('input[name="name"]').value +'</b> thành công', 4, 'success');
+
+					// reset value input
+            		formElement.querySelectorAll('input[name]').forEach( function(element) {
+						element.value = "";
+					});
+					// formElement.querySelector('select[name="typeCode"] option').selected = 'selected';
 				} else {
             		ShowMsgBox('Lỗi!', res.message, 'OK', 'fail');
             	}

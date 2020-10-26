@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class MenuManager extends CI_Model {
+class ProductManager extends CI_Model {
 
 	public $variable;
 
@@ -58,6 +58,3 @@ class MenuManager extends CI_Model {
 		return $this->db->delete('product_type');
 	}
 }
-
-/* End of file MenuManager.php */
-/* Location: ./application/models/MenuManager.php */

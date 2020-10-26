@@ -85,13 +85,15 @@
 	// Thêm account
 	document.getElementById('form-create-account').onsubmit = function(e) {
 		e.preventDefault();
-		var form = $(this);
+		var formData = new FormData(this);
 		var formElement = this;
 		$.ajax({
-			url: '/api/admin/account/CreateAccount',
+			url: '/api/Admin/accountAdmin',
 			type: 'POST',
 			dataType: 'json',
-			data: form.serialize(),
+			processData: false,
+	        contentType: false,
+			data: formData,
 		})
 		.done(function(data) {
 			if (data.status == true) {
