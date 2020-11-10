@@ -4,10 +4,10 @@
 			<div class="card-body">
 				<table class="list-order" id="order-offline">
 					<tr>
-						<th style="text-align: center">ID</th>
-						<th style="text-align: center">Giá</th>
-						<th style="text-align: center">Bàn</th>
-						<th style="text-align: center"></th>
+						<th>ID</th>
+						<th>Giá</th>
+						<th>Bàn</th>
+						<th></th>
 					</tr>
 					<?php foreach ($data as $key => $value): ?>
 					<tr>
@@ -29,6 +29,7 @@
 </div>
 
 <script>
+	// Duyệt đơn
 	document.querySelectorAll('.list-order .btn-done .done').forEach( function(element) {
 		element.onclick = function() {
 			var parentElement = this.parentElement.parentElement;
@@ -36,6 +37,7 @@
 		}
 	});
 
+	// Xóa đơn
 	document.querySelectorAll('.list-order .btn-done .remove').forEach( function(element) {
 		element.onclick = function() {
 			var parentElement = this.parentElement.parentElement;
@@ -55,6 +57,10 @@
 		})
 		.done(function(data) {
 			if (data.status) {
+				updateArr.forEach( function(element, index) {
+					if (element['id'] == id)
+						updateArr.splice(index, 1);
+				});
 				parentElement.remove();
 				ShowMsgModal('Thành công', data.message);
 			} else {
@@ -70,12 +76,15 @@
 	}
 
 
-
-	<?php $lastID = count($data) != 0 ? end($data)['id'] : 0; ?>
-	var lastID = <?php echo $lastID ?>;
-	window.orderOfflineRealTime = setInterval(function() {
+	// update realtime
+	var updateArr = <?php echo json_encode($data) ?>;
+	for (i in window.realtime){
+		clearInterval(window.realtime[i]);
+	    delete window.realtime[i];
+	}
+	window.realtime['orderOffline'] = setInterval(function() {
 		if (!document.getElementById('order-offline')) {
-			window.clearInterval(window.orderOfflineRealTime);
+			clearInterval(window.realtime['orderOffline']);
 			return false;
 		}
 		$.ajax({
@@ -84,22 +93,27 @@
 			dataType: 'json'
 		})
 		.done(function(data) {
-			var result = data.filter(function(value) {
-				return value['id'] > lastID;
+			updateArr.forEach( function(element, index) {
+				data.forEach( function(element2, index2) {
+					if (element['id'] == element2['id']) {
+						data.splice(index2, 1);
+					}
+				});
 			});
 
-			result.forEach( function(value) {
+			data.forEach( function(value) {
 				var price = formatMoney(value.price);
-				var html = '<tr>';
-					html += `<td class="order-id">${value.id}</td>`;
-					html += `<td class="order-price">${price}</td>`;
-					html += `<td class="order-table">${value.tableId}</td>`;
-					html += `<td class="btn-done order-btn">`;
-					html += `<span class="material-icons info" style="background-color: #2973D7;">info</span>`;
-					html += `<span class="material-icons done">done</span>`;
-					html += `<span class="material-icons remove" style="background-color: #EF5350;">delete_forever</span>`;
-					html += `</td>`;
-					html += `</tr>`;
+				var html = `<tr>
+							 	<td class="order-id">${value.id}</td>
+							 	<td class="order-price">${price}</td>
+							 	<td class="order-table">${value.tableId}</td>
+							 	<td class="btn-done order-btn">
+							 		<span class="material-icons info" style="background-color: #2973D7;">info</span>
+									<span class="material-icons done">done</span>
+							 		<span class="material-icons remove" style="background-color: #EF5350;">delete_forever</span>
+							 	</td>
+							</tr>`;
+
 				$('#order-offline').append(html);
 
 				var element = document.querySelector('#order-offline tr:last-child');
@@ -114,8 +128,8 @@
 					});
 				}
 
-				lastID = value.id;
 			});
+			updateArr = updateArr.concat(data);
 		})
 		.fail(function() {
 			ShowMsgModal('Lỗi', 'Vui lòng kiểm tra kết nối mạng', 3, 'danger');

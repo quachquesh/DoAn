@@ -144,6 +144,11 @@ class Admin extends CI_Controller {
 		if ($method == "GET") { // [GET] Lấy dữ liệu
 			if ($id == -1) {
 				$res = $this->GetData->getProduct();
+
+				foreach ($res as $key => $value) {
+					$data[$value['id']] = $value;
+				}
+				$res = $data;
 			} else {
 				$res = $this->GetData->getProduct($id);
 
@@ -154,7 +159,6 @@ class Admin extends CI_Controller {
 					$res = $res[0];
 				}
 			}
-
 			$this->output
 	        ->set_content_type('application/json')
 	        ->set_output(json_encode($res))
@@ -440,8 +444,8 @@ class Admin extends CI_Controller {
 	{
 		// Kiểm tra quyền
 		if(!$this->session->has_userdata('orderManager')) {
-			$this->output->set_status_header(500);
-			die();
+				$this->output->set_status_header(500);
+				die();
 		} else {
 			$this->load->model('admin/OrderManager');
 			$this->load->model('admin/GetData');
@@ -450,14 +454,39 @@ class Admin extends CI_Controller {
 		switch ($this->input->server('REQUEST_METHOD')) {
 			case 'GET':
 				if ($id === -1) {
-					$data = $this->GetData->getOffline();
+					$orders = $this->GetData->getOrderOffline();
+					$order_details = $this->GetData->getOrderDetail();
+					foreach ($orders as $key => $value) {
+						foreach ($order_details as $key2 => $value2) {
+							if ($value['id'] == $value2['orderId']) {
+								$orders[$key]['product'][] = $value2;
+								unset($order_details[$key2]);
+							}
+						}
+					}
 				} else {
-					$data = $this->GetData->getOffline($id);
+					$orders = $this->GetData->getOrderOffline($id);
+					if ($orders) {
+						$orders = $orders[0];
+						$orders['product'] = $this->GetData->getOrderDetail($orders['id']);
+					}
 				}
-				foreach ($data as $key => $value) {
-				    $data[$key]['productList'] = json_decode($value['productList']);
+
+				if ($orders) {
+					$product = $this->GetData->getProduct();
+					foreach ($product as $key => $value) {
+						$data[$value['id']] = $value;
+					}
+					$product = $data;
+
+					foreach ($orders as $key => $value) {
+						foreach ($value['product'] as $key2 => $value2) {
+							$orders[$key]['product'][$key2]['product'] = $product[$value2['productId']];
+						}
+					}
 				}
-				$res = $data;
+
+				$res = $orders;
 
 				$this->output
 			        ->set_content_type('application/json')
@@ -481,7 +510,7 @@ class Admin extends CI_Controller {
 				}
 				break;
 			case 'DELETE':
-				if ($this->OrderManager->deleteOrderOffline($id)) {
+				if ($this->OrderManager->deleteOrder($id)) {
 					$res['status'] = true;
 					$res['message'] = "Xóa đơn <b>$id</b> thành công";
 				} else {
@@ -494,7 +523,6 @@ class Admin extends CI_Controller {
 			        ->set_output(json_encode($res))
 			        ->set_status_header(200);
 				break;
-			
 			default:
 				$this->output->set_status_header(500);
 				break;
@@ -515,38 +543,260 @@ class Admin extends CI_Controller {
 		switch ($this->input->server('REQUEST_METHOD')) {
 			case 'GET':
 				if ($id === -1) {
-					$data = $this->GetData->getOnline();
+					$orders = $this->GetData->getOrderOnline();
+					$order_details = $this->GetData->getOrderDetail();
+					foreach ($orders as $key => $value) {
+						foreach ($order_details as $key2 => $value2) {
+							if ($value['id'] == $value2['orderId']) {
+								$orders[$key]['product'][] = $value2;
+								unset($order_details[$key2]);
+							}
+						}
+					}
 				} else {
-					$data = $this->GetData->getOnline($id);
+					$orders = $this->GetData->getOrderOnline($id);
+					if ($orders) {
+						$orders = $orders[0];
+						$orders['product'] = $this->GetData->getOrderDetail($orders['id']);
+					}
 				}
-				foreach ($data as $key => $value) {
-				    $data[$key]['productList'] = json_decode($value['productList']);
+
+				if ($orders) {
+					$product = $this->GetData->getProduct();
+					foreach ($product as $key => $value) {
+						$data[$value['id']] = $value;
+					}
+					$product = $data;
+
+					foreach ($orders as $key => $value) {
+						foreach ($value['product'] as $key2 => $value2) {
+							$orders[$key]['product'][$key2]['product'] = $product[$value2['productId']];
+						}
+					}
 				}
-				$res = $data;
+
+				$res = $orders;
 
 				$this->output
 			        ->set_content_type('application/json')
 			        ->set_output(json_encode($res))
 			        ->set_status_header(200);
 				break;
-			case 'DELETE':
-				if ($this->OrderManager->deleteOrderOnline($id)) {
-					$res['status'] = true;
-					$res['message'] = "Duyệt đơn <b>$id</b> thành công";
-				} else {
-					$res['status'] = false;
-					$res['message'] = "Duyệt đơn <b>$id</b> thất bại";
-				}
+			case 'POST':
+				if ($id != -1) {
+					if ($this->OrderManager->applyOrderOnline($id)) {
+						$res['status'] = true;
+						$res['message'] = 'Duyệt đơn <b>'.$id.'</b> thành công';
+					} else {
+						$res['status'] = false;
+						$res['message'] = 'Duyệt đơn <b>'.$id.'</b> thất bại';
+					}
 
-				$this->output
+					$this->output
 			        ->set_content_type('application/json')
 			        ->set_output(json_encode($res))
 			        ->set_status_header(200);
+				}
 				break;
-			
 			default:
 				$this->output->set_status_header(500);
 				break;
+		}
+	}
+
+	public function orderSuccess($id = -1)
+	{
+		// Kiểm tra quyền
+		if(!$this->session->has_userdata('orderManager')) {
+				$this->output->set_status_header(500);
+				die();
+		} else {
+			$this->load->model('admin/OrderManager');
+			$this->load->model('admin/GetData');
+		}
+
+		switch ($this->input->server('REQUEST_METHOD')) {
+			case 'GET':
+				if ($id === -1) {
+					$orders = $this->GetData->getOrderSuccess();
+					$order_details = $this->GetData->getOrderDetail();
+					foreach ($orders as $key => $value) {
+						foreach ($order_details as $key2 => $value2) {
+							if ($value['id'] == $value2['orderId']) {
+								$orders[$key]['product'][] = $value2;
+								unset($order_details[$key2]);
+							}
+						}
+					}
+				} else {
+					$orders = $this->GetData->getOrderSuccess($id);
+					if ($orders) {
+						$orders = $orders[0];
+						$orders['product'] = $this->GetData->getOrderDetail($orders['id']);
+					}
+				}
+
+				if ($orders) {
+					$product = $this->GetData->getProduct();
+					foreach ($product as $key => $value) {
+						$data[$value['id']] = $value;
+					}
+					$product = $data;
+
+					foreach ($orders as $key => $value) {
+						foreach ($value['product'] as $key2 => $value2) {
+							$orders[$key]['product'][$key2]['product'] = $product[$value2['productId']];
+						}
+					}
+				}
+
+				$res = $orders;
+
+				$this->output
+			        ->set_content_type('application/json')
+			        ->set_output(json_encode($res))
+			        ->set_status_header(200);
+				break;
+			case 'POST':
+				if ($id != -1) {
+					if ($this->OrderManager->applyOrderSuccess($id)) {
+						$res['status'] = true;
+						$res['message'] = 'Hoàn thành đơn <b>'.$id.'</b> thành công';
+					} else {
+						$res['status'] = false;
+						$res['message'] = 'Lỗi hoàn thành, vui lòng reload lại trang';
+					}
+
+					$this->output
+			        ->set_content_type('application/json')
+			        ->set_output(json_encode($res))
+			        ->set_status_header(200);
+				}
+				break;
+			case 'DELETE':
+				if ($this->OrderManager->deleteOrder($id)) {
+					$res['status'] = true;
+					$res['message'] = "Xóa đơn <b>$id</b> thành công";
+				} else {
+					$res['status'] = false;
+					$res['message'] = "Xóa đơn <b>$id</b> thất bại";
+				}
+
+				$this->output
+			        ->set_content_type('application/json')
+			        ->set_output(json_encode($res))
+			        ->set_status_header(200);
+				break;
+			default:
+				$this->output->set_status_header(500);
+				break;
+		}
+	}
+
+	public function voucher($id = -1)
+	{
+		// Kiểm tra quyền
+		if(!$this->session->has_userdata('voucherManager')) {
+			$this->output->set_status_header(500);
+			die();
+		} else {
+			$this->load->model('admin/VoucherManager');
+			$this->load->model('admin/GetData');	
+		}
+
+		// Kiểm tra phương thức
+		$method = $this->input->server('REQUEST_METHOD');
+
+		if ($method == "GET") { // [GET] Lấy dữ liệu
+			if ($id == -1) {
+				$res = $this->GetData->getVoucher();
+
+				foreach ($res as $key => $value) {
+					$data[$value['id']] = $value;
+				}
+				$res = $data;
+			} else {
+				$res = $this->GetData->getVoucher($id);
+
+				if (!$res) {
+					$res['status'] = false;
+					$res['message'] = 'Không tìm thấy thông tin';
+				} else {
+					$res = $res[0];
+				}
+			}
+			$this->output
+	        ->set_content_type('application/json')
+	        ->set_output(json_encode($res))
+	        ->set_status_header(200);
+		} else if ($method == "POST") {
+			$res['status'] = true;
+			$this->load->helper('Validator');
+			
+			$data['code'] = strtoupper($this->input->post('code'));
+			$data['content'] = $this->input->post('content');
+			$data['count'] = $this->input->post('count');
+			$data['discountType'] = $this->input->post('discountType');
+			$data['discountValue'] = $this->input->post('discountValue');
+			$data['timeStart'] = strtotime($this->input->post('timeStart'));
+			$data['timeEnd'] = strtotime($this->input->post('timeEnd'));
+
+			// check dữ liệu
+			foreach ($data as $key => $value) {
+				if (isRequired($value) && $key != 'discountType'){
+					$res['status'] = false;
+					$res['message'] = 'Vui lòng điền đủ thông tin';
+					break;
+				}
+			}
+			if (!isNumber($data['count'])) {
+				$res['status'] = false;
+				$res['message'] = 'Số lượng sai định dạng';
+			} else if (!isNumber($data['discountValue'])) {
+				$res['status'] = false;
+				$res['message'] = 'Giá trị giảm giá sai định dạng';
+			} else if ($data['discountType'] != 0 && $data['discountType'] != 1) {
+				$res['status'] = false;
+				$res['message'] = 'Loại giảm giá sai định dạng';
+			}
+			if ($id == -1) { // [POST] Tạo mới
+				
+				// thêm dữ liệu
+				if ($res['status']) {
+					$insert_id = $this->VoucherManager->createVoucher($data);
+					if ($insert_id) {
+						$res['message'] = 'Thêm voucher <b>'.$data['code'].'</b> thành công';
+						$res['id'] = $insert_id;
+					} else {
+						$res['status'] = false;
+						$res['message'] = 'Voucher <b>'.$data['code'].'</b> đã tồn tại';
+					}
+				}
+				
+				$this->output
+		        ->set_content_type('application/json')
+		        ->set_output(json_encode($res))
+		        ->set_status_header(201);
+			}
+			else { // [POST] Cập nhật mã
+
+				// cập nhật dữ liệu
+				if ($res['status']) {
+					if ($this->VoucherManager->updateVoucher($id, $data)) {
+						$res['message'] = 'Cập nhật voucher <b>'.$data['code'].'</b> thành công';
+					} else {
+						$res['status'] = false;
+						$res['message'] = 'Voucher <b>'.$data['code'].'</b> đã tồn tại';
+					}
+				}
+
+				$this->output
+		        ->set_content_type('application/json')
+		        ->set_output(json_encode($res))
+		        ->set_status_header(200);
+			}
+		} else {
+			$this->output->set_status_header(500);
 		}
 	}
 }

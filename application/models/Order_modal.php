@@ -10,21 +10,45 @@ class Order_modal extends CI_Model {
 		
 	}
 
-	public function online($data)
-	{
-		$this->db->insert('order_done', $data);
-		return $this->db->insert_id();
-	}
-
 	public function onlinePayment($data)
 	{
-		return $this->db->insert('order_payment', $data);
+		return $this->insertOrder($data, 0);
+
 	}
+	
+	public function online($data)
+	{
+		return $this->insertOrder($data, 2);
+	}
+
 
 	public function offline($data)
 	{
-		$this->db->insert('order_wait', $data);
-		return $this->db->insert_id();
+		return $this->insertOrder($data, 1);
+	}
+
+	function insertOrder($data, $status)
+	{
+		$orders = array(
+			'id' => $data['id'], 
+			'price' => $data['price'], 
+			'note' => $data['note'], 
+			'tableId' => $data['tableId'],
+			'voucher' => $data['voucher'],
+			'status' => $status
+		);
+
+		$this->db->trans_start();
+		$this->db->insert('orders', $orders);
+		foreach ($data['productList'] as $value) {
+			$order_details = array(
+				'orderId' => $data['id'],
+				'productId' => $value['id'],
+				'productAmount' => $value['amount']
+			);
+			$this->db->insert('order_details', $order_details);
+		}
+		return $this->db->trans_complete();
 	}
 }
 

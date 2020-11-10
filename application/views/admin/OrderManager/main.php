@@ -12,22 +12,36 @@
 	</div>
 </div>
 <div class="inner__button">
-	<div id="OrderWait" class="btn-load-page btn btn-trans active">
-		Chưa thanh toán
-	</div>
-	<div id="OrderDone" class="btn-load-page btn btn-trans">
-		Đã thanh toán
-	</div>
+	<?php $orderManager = $this->session->userdata('orderManager');
+	if ($orderManager == 1 || $orderManager == 3)
+		echo '<div id="OrderWait" class="btn-load-page btn btn-trans active">Chưa thanh toán</div>';
+	if ($orderManager == 1 || $orderManager == 2)
+		echo '<div id="OrderDone" class="btn-load-page btn btn-trans">Đã thanh toán</div>';
+	if ($orderManager == 1 || $orderManager == 3)
+		echo '<div id="OrderSuccess" class="btn-load-page btn btn-trans">Pha chế xong</div>';
+	?>
 </div>
 <div id="inner__body" class="inner__body row" data-body="OrderWait">
 	<!-- include main -->
-	<?php include "orderWait.php" ?>
+	<?php
+	if ($orderManager == 1 || $orderManager == 3)
+		include "orderWait.php";
+	else if ($orderManager == 1 || $orderManager == 2)
+		include "OrderSuccess.php";
+	?>
 
 </div>
 
 <script type="text/javascript" src="/vendor/js/msgBox.js"></script>
 
 <script>
+
+	<?php if ($orderManager == 2): ?>
+		document.getElementById('OrderDone').classList.add('active');
+		document.getElementById('inner__body').setAttribute('data-body', 'OrderDone');
+	<?php endif ?>
+
+
 	var btnLoadPage = document.querySelectorAll('.btn-load-page');
 	var bodyElement = document.querySelector('.inner__body');
 	btnLoadPage.forEach( function(element, index) {

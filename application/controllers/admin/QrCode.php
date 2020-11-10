@@ -13,9 +13,7 @@ class QrCode extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->model('admin/GetData');
-		$data = array('store' => $this->GetData->getStore());
-		$this->load->view('admin/qrcode', $data, FALSE);
+		$this->load->view('admin/qrcode');
 	}
 
 }

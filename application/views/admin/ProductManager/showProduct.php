@@ -75,10 +75,9 @@
 </div>
 
 <div class="edit-product hidden">
+	<div class="overlay"></div>
 	<div class="inner__body-card row no-gutters card card-block">
-		<div class="overlay"></div>
 		<div class="form-box col c-12 m-6 l-4 m-o-3 l-o-4">
-
 			<div class="header-card">
 				<div class="header-card__icon material-icons" style="color: #e84393">edit</div>
 				<div class="header-card__title">Sửa sản phẩm</div>
@@ -373,6 +372,7 @@
 			dataType: 'json'
 		})
 		.done(function(data) {
+			console.log(data);
 			if (typeof data.status === 'undefined') {
 				formUpdate.querySelector('input[name="productID"]').value = data.id;
 				formUpdate.querySelector('input[name="name"]').value = data.name;

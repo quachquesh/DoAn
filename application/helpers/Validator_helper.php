@@ -1,6 +1,8 @@
 <?php
 	// chuỗi rỗng => true
 	function isRequired($str) {
+		if ($str == '0')
+			return false;
 		return empty($str) ? true : false;
 	}
 

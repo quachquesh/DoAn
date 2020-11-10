@@ -14,8 +14,8 @@
 					<tr>
 						<td class="order-id"><?php echo $value['id'] ?></td>
 						<td class="order-product">
-							<?php foreach ($value['productList'] as $valueProc): ?>
-								<span>- <?php echo $valueProc->name ?> <b style="color: #ff4757">x <?php echo $valueProc->amount ?></b></span>
+							<?php foreach ($value['product'] as $keyProc => $valueProc): ?>
+								<span>- <?php echo $valueProc['product']['name']; ?> <b style="color: #ff4757">x <?php echo $valueProc['productAmount'] ?></b></span>
 							<?php endforeach ?>
 						</td>
 						<td class="order-note"><?php echo $value['note'] ?></td>
@@ -32,6 +32,7 @@
 </div>
 
 <script>
+	// click duyệt đơn
 	document.querySelectorAll('.list-order .btn-done span').forEach( function(element) {
 		element.onclick = function() {
 			applyOrder(this);
@@ -43,11 +44,15 @@
 		var id = parentElement.querySelector('.order-id').innerText;
 		$.ajax({
 			url: '/api/Admin/orderOnline/'+id,
-			type: 'DELETE',
+			type: 'POST',
 			dataType: 'json'
 		})
 		.done(function(data) {
 			if (data.status) {
+				updateArr.forEach( function(element, index) {
+					if (element['id'] == id)
+						updateArr.splice(index, 1);
+				});
 				parentElement.remove();
 				ShowMsgModal('Thành công', data.message);
 			} else {
@@ -59,12 +64,16 @@
 		})
 	}
 
+	// update realtime
+	var updateArr = <?php echo json_encode($data) ?>; // khởi tạo danh sách hiện có
+	for (i in window.realtime){
+		clearInterval(window.realtime[i]);
+	    delete window.realtime[i];
+	}
+	window.realtime['orderOnline'] = setInterval(function() {
 
-	<?php $lastID = count($data) != 0 ? end($data)['id'] : 0; ?>
-	var lastID = <?php echo $lastID ?>;
-	window.orderOnlineRealTime = setInterval(function() {
 		if (!document.getElementById('order-online')) {
-			window.clearInterval(window.orderOnlineRealTime);
+			clearInterval(window.realtime['orderOnline']);
 			return false;
 		}
 		$.ajax({
@@ -73,16 +82,21 @@
 			dataType: 'json'
 		})
 		.done(function(data) {
-			var result = data.filter(function(value) {
-				return value['id'] > lastID;
+			// duyệt mảng lấy các phần tử khác mảng khởi tạo
+			updateArr.forEach( function(element, index) {
+				data.forEach( function(element2, index2) {
+					if (element['id'] == element2['id']) {
+						data.splice(index2, 1);
+					}
+				});
 			});
 
-			result.forEach( function(value) {
+			data.forEach( function(value) {
 				var html = '<tr>';
 					html += `<td class="order-id">${value.id}</td>`;
 					html += `<td class="order-product">`;
-					value.productList.forEach( function(product) {
-						html += `<span>- ${product.name} <b style="color: #ff4757">x ${product.amount}</b></span>`
+					value.product.forEach( function(product) {
+						html += `<span>- ${product.product.name} <b style="color: #ff4757">x ${product.productAmount}</b></span>`
 					});
 					html += `</td>`;
 					html += `<td class="order-note">${value.note}</td>`;
@@ -96,8 +110,8 @@
 					applyOrder(this);
 				}
 
-				lastID = value.id;
 			});
+			updateArr = updateArr.concat(data);
 		})
 		.fail(function() {
 			ShowMsgModal('Lỗi', 'Vui lòng kiểm tra kết nối mạng', 3, 'danger');

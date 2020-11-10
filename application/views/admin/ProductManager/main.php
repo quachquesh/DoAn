@@ -15,11 +15,11 @@
 	<div id="CreateProduct" class="btn-load-page btn btn-trans active">
 		Thêm sản phẩm
 	</div>
-	<div id="ShowProductType" class="btn-load-page btn btn-trans">
-		Loại sản phẩm
-	</div>
 	<div id="ShowProduct" class="btn-load-page btn btn-trans">
 		Sản phẩm
+	</div>
+	<div id="ShowProductType" class="btn-load-page btn btn-trans">
+		Loại sản phẩm
 	</div>
 </div>
 <div id="inner__body" class="inner__body row" data-body="CreateProduct">

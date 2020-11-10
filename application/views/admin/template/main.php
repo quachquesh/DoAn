@@ -58,9 +58,7 @@
 	<script  type="text/javascript" src="/vendor/js/qrcode.min.js"></script>
 
 	<script>
-		document.querySelector('.icon-img').onclick = function() {
-			ShowQuestionBox('test');
-		}
+		window.realtime = [];
 	</script>
 </body>
 </html>

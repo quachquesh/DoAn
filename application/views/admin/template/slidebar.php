@@ -39,6 +39,16 @@
 				</div>
 			</li>
 			<?php endif ?>
+			<?php if ($this->session->userdata('voucherManager')): ?>
+			<li>
+				<div id="VoucherManager" class="nav-menu__title slidebar-btn">
+					<div  class="nav-menu__title-name">
+						<div class="icon-menu material-icons">loyalty</div>
+						<span>Quản lý mã giảm giá</span>
+					</div>
+				</div>
+			</li>
+			<?php endif ?>
 			<!-- qr code -->
 			<li>
 				<div id="QrCode" class="nav-menu__title slidebar-btn">

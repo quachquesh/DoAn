@@ -24,15 +24,6 @@
 						<div class="label-group">
 							<span>Thông tin</span>
 						</div>
-						<div class="form-group-select">
-							<label>Cửa hàng</label>
-							<select name="code">
-								<option value="">--- Chọn cửa hàng ---</option>
-								<?php foreach ($store as $value): ?>
-								<option value="<?php echo $value['code'] ?>"><?php echo $value['name'] ?></option>
-								<?php endforeach ?>
-							</select>
-						</div>
 						<div class="form-group">
 							<label>Số bàn</label>
 							<input name="numberTable" type="text" placeholder="101" required>
@@ -72,10 +63,8 @@
 	var form = document.getElementById('form-create-qrcode');
 	form.addEventListener('submit', function(e) {
 		e.preventDefault();
-		var code = form.querySelector('select[name="code"]').value;
-		var numberTable = form.querySelector('input[name="numberTable"]').value;
 		qrcode.clear();
-		qrcode.makeCode('<?php echo base_url() ?>order?StoreId='+code+'&TableId='+numberTable);
+		qrcode.makeCode('<?php echo base_url() ?>order?TableId='+form.querySelector('input[name="numberTable"]').value);
 		ShowMsgModal('Thông báo', 'Đã tạo QR Code', 2, 'info');
 	})
 </script>

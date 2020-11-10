@@ -10,17 +10,15 @@ class Order extends CI_Controller {
 
 	public function index()
 	{
-		$store = $this->GetData->getStore($_GET['StoreId']);
+		$table = $_GET['TableId'];
 
-		if ($store) {
+		if ($table) {
 			$product = $this->GetData->getProduct();
 			$productType = $this->GetData->getProductType();
-			$store = $store[0];
 			$data = array(
 				'product' => $product,
 				'productType' => $productType,
-				'store' => $store,
-				'table' => $_GET['TableId'],
+				'table' => $table,
 			);
 			if (isset($_GET['errorCode']) && isset($_GET['orderType'])) {
 				$data['momo'] = $this->input->get();

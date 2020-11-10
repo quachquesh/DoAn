@@ -299,9 +299,10 @@ header{
 
         .cart-header {
             display: flex;
+            user-select: none;
 
             .btn-back {
-
+                cursor: pointer;
             }
 
             .title {
@@ -323,6 +324,11 @@ header{
                     display: flex;
                     justify-content: space-around;
                     align-items: center;
+
+                    .items-remove {
+                        user-select: none;
+                        cursor: pointer;
+                    }
 
                     .items-amount {
                         width: 25px;
@@ -373,7 +379,8 @@ header{
                     line-height: 30px;
                     padding: 0 10px;
                     font-size: 14px;
-
+                    user-select: none;
+                    cursor: pointer;
                 }
             }
 

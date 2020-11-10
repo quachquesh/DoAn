@@ -12,40 +12,42 @@ class OrderManager extends CI_Model {
 
 	public function applyOrderOffline($id)
 	{
-		$sql = "INSERT INTO order_done (order_done.productList, order_done.price, order_done.note, order_done.tableId, order_done.storeId)
-				SELECT order_wait.productList, order_wait.price, order_wait.note, order_wait.tableId, order_wait.storeId
-				FROM order_wait
-				WHERE order_wait.id = '$id';";
-		$sql2 = "DELETE FROM order_wait WHERE order_wait.id = '$id';";
-		$this->db->trans_start();
-		$this->db->query($sql);
-		$this->db->query($sql2);
-		return $this->db->trans_complete();
+		$data = array('status' => 2);
+		$this->db->where('id', $id);
+		return $this->db->update('orders', $data);
 	}
 
-	public function deleteOrderOffline($id)
-	{
-		$this->db->where('id', $id);
-		return $this->db->delete('order_wait');
-	}
-	
 	public function applyOrderOnline($id)
 	{
-		$sql = "INSERT INTO order_done (order_done.productList, order_done.price, order_done.note, order_done.tableId, order_done.storeId)
-				SELECT order_payment.productList, order_payment.price, order_payment.note, order_payment.tableId, order_payment.storeId
-				FROM order_payment
-				WHERE order_payment.id = '$id';";
-		$sql2 = "DELETE FROM order_payment WHERE order_payment.id = '$id';";
-		$this->db->trans_start();
-		$this->db->query($sql);
-		$this->db->query($sql2);
-		return $this->db->trans_complete();
+		$data = array('status' => 3);
+		$this->db->where('id', $id);
+		return $this->db->update('orders', $data);
 	}
 
-	public function deleteOrderOnline($id)
+	public function applyOrderSuccess($id)
+	{
+		$data = array('status' => 4);
+		$this->db->where('id', $id);
+		return $this->db->update('orders', $data);
+	}
+
+	public function deleteOrder($id)
 	{
 		$this->db->where('id', $id);
-		return $this->db->delete('order_done');
+		return $this->db->delete('orders');
+	}
+	
+	public function OrderConfirm($id)
+	{
+		$data = array('status' => 2);
+		$this->db->select('*');
+		$this->db->where('id', $id);
+		if ($this->db->get('orders')->result_array()){
+			$this->db->where('id', $id);
+			return $this->db->update('orders', $data);
+		} else {
+			return false;
+		}
 	}
 }
 

@@ -50,34 +50,61 @@ class GetData extends CI_Model {
 		return $this->db->get('product_type')->result_array();
 	}
 
-	public function getStore($code = -1)
+	public function getOrderOffline($id = -1)
 	{
-	    $this->db->select('*');
-	    if ($code != -1)
-	    	$this->db->where('code', $code);
-	    return $this->db->get('stores')->result_array();
+		$this->db->select('*');
+		if ($id !== -1)
+			$this->db->where('id', $id);
+		$this->db->where('status', 1);
+		return $this->db->get('orders')->result_array();
+	}
+	
+	public function getOrderOnline($id = -1)
+	{
+		$this->db->select('*');
+		if ($id !== -1)
+			$this->db->where('id', $id);
+		$this->db->where('status', 2);
+		return $this->db->get('orders')->result_array();
+	}
+
+	public function getOrderSuccess($id = -1)
+	{
+		$this->db->select('*');
+		if ($id !== -1)
+			$this->db->where('id', $id);
+		$this->db->where('status', 3);
+		return $this->db->get('orders')->result_array();
 	}
 
 	public function getOrderHistory()
 	{
 		$this->db->select('*');
-		return $this->db->get('order_history')->result_array();
+		$this->db->where('status', 4);
+		return $this->db->get('orders')->result_array();
 	}
 
-	public function getOffline($id = -1)
+	public function getOrderDetail($orderId = -1)
 	{
 		$this->db->select('*');
-		if ($id !== -1)
-			$this->db->where('id', $id);
-		return $this->db->get('order_wait')->result_array();
+		if ($orderId !== -1)
+			$this->db->where('orderId', $orderId);
+		return $this->db->get('order_details')->result_array();
 	}
-	
-	public function getOnline($id = -1)
+
+	public function getVoucher($id = -1)
 	{
 		$this->db->select('*');
 		if ($id !== -1)
 			$this->db->where('id', $id);
-		return $this->db->get('order_done')->result_array();
+		return $this->db->get('vouchers')->result_array();
+	}
+
+	public function getVoucherByCode($code)
+	{
+		$this->db->select('*');
+		$this->db->where('code', $code);
+		return $this->db->get('vouchers')->row_array();
 	}
 }
 
