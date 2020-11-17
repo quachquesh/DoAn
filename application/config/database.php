@@ -84,7 +84,7 @@ $db['default'] = array(
 	'pconnect' => FALSE,
 	'db_debug' => FALSE,
 	// 'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
+	'cache_on' => false,
 	'cachedir' => '',
 	'char_set' => 'utf8',
 	'dbcollat' => 'utf8_general_ci',

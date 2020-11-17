@@ -9,15 +9,10 @@ class CreateUser extends CI_Model {
 		parent::__construct();
 		
 	}
-	public function AddData($array)
+	public function AddData($data)
 	{
-		$admin_login = array(
-			'userName' => $array['userName'],
-			'password' => $array['password']
-		);
-		unset($array['password']);
-		$check = $this->db->insert('admins', $array);
-		return $this->db->insert('admin_login', $admin_login);
+		$this->db->insert('admin_users', $data);
+		return $this->db->insert_id();
 	}
 }
 

@@ -9,14 +9,10 @@ class Index extends CI_Controller {
 
 	public function index()
 	{
-		if ($this->session->has_userdata('level')) {
+		if ($this->session->has_userdata('role')) {
 			$this->load->view('admin/template/main');
 		} else {
-			if (!$this->session->has_userdata('userName'))
-				$this->load->view('admin/login_view');
-			else {
-				$this->output->set_status_header(500);
-			}
+			$this->load->view('admin/login_view');
 		}
 	}
 

@@ -13,7 +13,7 @@ class AuthUser extends CI_Model {
 	public function Validate($username)
 	{
 		$this->db->where('userName', $username);
-		return $this->db->get('admin_login')->row_array();
+		return $this->db->get('admin_users')->row_array();
 	}
 }
 

@@ -49,8 +49,8 @@
 						<label>Chức vụ:</label>
 						<select name="level">
 							<option value="">--- Chọn chức vụ ---</option>
-							<?php foreach ($duty as $value): ?>
-							<option value="<?php echo $value['level'] ?>"><?php echo $value['duty'] ?></option>
+							<?php foreach ($role as $value): ?>
+							<option value="<?php echo $value['id'] ?>"><?php echo $value['name'] ?></option>
 							<?php endforeach ?>
 						</select>
 					</div>
@@ -104,10 +104,10 @@
 				formElement.querySelector('select[name="level"] option').selected = 'selected';
 			}
 			else
-				ShowMsgModal('Lỗi!', data.message, 4, 'danger');
+				ShowMsgModal('Thất bại!', data.message, 4, 'danger');
 		})
 		.fail(function() {
-			ShowMsgBox('Thất bại!', 'Tên đăng nhập <b>đã tồn tại</b>', 'OK', 'fail');
+			ShowMsgBox('Lỗi mạng!', 'Không kết nối được máy chủ', 'OK', 'fail');
 		})
 		.always(function() {
 			// console.log("complete");

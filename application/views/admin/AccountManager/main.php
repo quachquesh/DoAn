@@ -16,13 +16,7 @@
 		Tạo tài khoản
 	</div>
 	<div class="btn btn-trans">
-		Quyền hạn
-	</div>
-	<div class="btn btn-trans">
 		Tài khoản admin
-	</div>
-	<div class="btn btn-trans">
-		Tài khoản khách
 	</div>
 </div>
 <div class="inner__body row">

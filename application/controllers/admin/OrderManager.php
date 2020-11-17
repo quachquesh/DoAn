@@ -5,12 +5,21 @@ class OrderManager extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('admin/GetData');
+		if (!$this->session->has_userdata('role')) {
+			$this->output->set_status_header(500);
+			die();
+		} else {
+			$this->load->model('admin/GetData');
+		}
 	}
 
 	public function index()
 	{
-		$data = $this->GetData->getOrderOffline();
+		if ($this->session->userdata('role') == 2) {
+			$data = $this->OrderDone(true);
+		} else {
+			$data = $this->GetData->getOrderOffline();
+		}
 		$data = array('data' => $data);
 		$this->load->view('admin/OrderManager/main', $data, FALSE);
 	}
@@ -22,7 +31,7 @@ class OrderManager extends CI_Controller {
 		$this->load->view('admin/OrderManager/orderWait', $data, false);
 	}
 
-	public function OrderDone()
+	public function OrderDone($load = false)
 	{
 		$orders = $this->GetData->getOrderOnline();
 		$order_details = $this->GetData->getOrderDetail();
@@ -45,8 +54,12 @@ class OrderManager extends CI_Controller {
 				$orders[$key]['product'][$key2]['product'] = $product[$value2['productId']];
 			}
 		}
-		$data = array('data' => $orders);
-		$this->load->view('admin/OrderManager/orderDone', $data, false);
+		if ($load == true) {
+			return $orders;
+		} else {
+			$data = array('data' => $orders);
+			$this->load->view('admin/OrderManager/orderDone', $data, false);
+		}
 	}
 
 	public function OrderSuccess()

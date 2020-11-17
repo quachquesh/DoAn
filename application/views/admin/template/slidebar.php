@@ -9,7 +9,7 @@
 					</div>
 				</div>
 			</li>
-			<?php if ($this->session->userdata('accountManager')): ?>
+			<?php if ($this->session->userdata('role') == 1): ?>
 			<li>
 				<div id="AccountManager" class="nav-menu__title slidebar-btn">
 					<div  class="nav-menu__title-name">
@@ -18,8 +18,6 @@
 					</div>
 				</div>
 			</li>
-			<?php endif ?>
-			<?php if ($this->session->userdata('productManager')): ?>
 			<li>
 				<div id="ProductManager" class="nav-menu__title slidebar-btn">
 					<div  class="nav-menu__title-name">
@@ -28,18 +26,6 @@
 					</div>
 				</div>
 			</li>
-			<?php endif ?>
-			<?php if ($this->session->userdata('orderManager')): ?>
-			<li>
-				<div id="OrderManager" class="nav-menu__title slidebar-btn">
-					<div  class="nav-menu__title-name">
-						<div class="icon-menu material-icons">list_alt</div>
-						<span>Đơn đặt hàng</span>
-					</div>
-				</div>
-			</li>
-			<?php endif ?>
-			<?php if ($this->session->userdata('voucherManager')): ?>
 			<li>
 				<div id="VoucherManager" class="nav-menu__title slidebar-btn">
 					<div  class="nav-menu__title-name">
@@ -48,7 +34,6 @@
 					</div>
 				</div>
 			</li>
-			<?php endif ?>
 			<!-- qr code -->
 			<li>
 				<div id="QrCode" class="nav-menu__title slidebar-btn">
@@ -58,6 +43,18 @@
 					</div>
 				</div>
 			</li>
+			<?php endif ?>
+
+			<?php if ($this->session->userdata('role') > 1): ?>
+			<li>
+				<div id="OrderManager" class="nav-menu__title slidebar-btn">
+					<div  class="nav-menu__title-name">
+						<div class="icon-menu material-icons">list_alt</div>
+						<span>Đơn đặt hàng</span>
+					</div>
+				</div>
+			</li>
+			<?php endif ?>
 
 			<!-- <li>
 				<div class="nav-menu__title dropdown-mm">

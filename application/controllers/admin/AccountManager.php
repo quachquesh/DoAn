@@ -5,7 +5,7 @@ class AccountManager extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		if (!$this->session->userdata('accountManager')) {
+		if (!$this->session->userdata('role') || $this->session->userdata('role') != 1) {
 			$this->output->set_status_header(500);
 			die();
 		}
@@ -14,23 +14,9 @@ class AccountManager extends CI_Controller {
 	public function index()
 	{
 		$this->load->model('admin/GetData');
-		$data = $this->GetData->getDuty();
-		foreach ($data as $key => $value) {
-			$level[$key] = $value['level'];
-		}
-		array_multisort($level, SORT_ASC, $data);
+		$data = $this->GetData->getRole();
 
-		$adminLevel = $this->session->userdata('level');
-		if ($adminLevel != 1) {
-			foreach ($data as $key => $value) {
-				if ($value['level'] > $adminLevel) {
-					break;
-				}
-				unset($data[$key]);
-			}
-		}
-
-		$data = array('duty' => $data);
+		$data = array('role' => $data);
 		$this->load->view('admin/AccountManager/main', $data, FALSE);
 	}
 

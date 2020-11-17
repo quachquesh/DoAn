@@ -34,7 +34,7 @@
 				</div>
 				<div class="user__info">
 					<div class="user-name"><?php echo $this->session->userdata('firstName') . " " . $this->session->userdata('lastName') ?></div>
-					<div class="user-level"><?php echo $this->session->userdata('duty'); ?></div>
+					<div class="user-level"><?php echo $this->session->userdata('roleName'); ?></div>
 				</div>
 			</div>
 		</div>

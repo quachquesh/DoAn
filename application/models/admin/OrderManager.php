@@ -10,25 +10,33 @@ class OrderManager extends CI_Model {
 		
 	}
 
-	public function applyOrderOffline($id)
+	public function applyOrderOffline($id, $user)
 	{
-		$data = array('status' => 2);
-		$this->db->where('id', $id);
-		return $this->db->update('orders', $data);
+		return $this->applyOrder($id, $user, 2);
 	}
 
-	public function applyOrderOnline($id)
+	public function applyOrderOnline($id, $user)
 	{
-		$data = array('status' => 3);
-		$this->db->where('id', $id);
-		return $this->db->update('orders', $data);
+		return $this->applyOrder($id, $user, 3);
 	}
 
-	public function applyOrderSuccess($id)
+	public function applyOrderSuccess($id, $user)
 	{
-		$data = array('status' => 4);
+		return $this->applyOrder($id, $user, 4);
+	}
+
+	function applyOrder($id, $user , $orderStatus) {
+		$data = array('status' => $orderStatus);
+		$order_confirm = array(
+			'orderId' => $id,
+			'adminId' => $user,
+			'orderStatus' => $orderStatus
+		);
+		$this->db->trans_start();
+		$this->db->insert('order_confirm', $order_confirm);
 		$this->db->where('id', $id);
-		return $this->db->update('orders', $data);
+		$this->db->update('orders', $data);
+		return $this->db->trans_complete();
 	}
 
 	public function deleteOrder($id)

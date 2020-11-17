@@ -151,10 +151,13 @@
             // Giỏ hàng {'product-id': 'amount'}
             var cart = {};
             var cartProduct = new Array();
+            var cartDiscount = [];
+            cartDiscount['id'] = 0;
+            cartDiscount['code'] = "";
+            cartDiscount['type'] = 0;
+            cartDiscount['value'] = 0;
             var cartPrice_old = 0;
-            var cartPrice_discount = 0;
             var cartPrice_current = 0;
-            var discountCode = "";
             // Số lượng giỏ hàng
             var amountAll = 0;
             var cartHeaderElement = document.querySelector('.header_navbar-cart');
@@ -269,9 +272,11 @@
                                                 cartPrice_old -= price;
 
                                                 // Cập nhật lại giá
-                                                cartPrice_current = cartPrice_old - cartPrice_discount;
+                                                var money = calcMoney(cartPrice_old, cartDiscount['type'], cartDiscount['value']);
+                                                cartPrice_current = money['price_current'];
+
                                                 cartElement.querySelector('.cart-price-all').innerHTML = '<b style="margin-right: 15px;">TỔNG:</b>'+formatMoney(cartPrice_old)+' Đ'
-                                                cartElement.querySelector('.cart-price-discount i').innerText = formatMoney(cartPrice_discount);
+                                                cartElement.querySelector('.cart-price-discount i').innerText = formatMoney(money['discountValue']);
                                                 cartElement.querySelector('.cart-price-pay').innerHTML = '<b style="margin-right: 15px;">THANH TOÁN:</b>'+formatMoney(cartPrice_current)+' Đ';
                                             }
                                         });
@@ -312,9 +317,11 @@
                             });
                         }
 
-                        cartPrice_current = cartPrice_old - cartPrice_discount;
+                        var money = calcMoney(cartPrice_old, cartDiscount['type'], cartDiscount['value']);
+                        cartPrice_current = money['price_current'];
+
                         cartElement.querySelector('.cart-price-all').innerHTML = '<b style="margin-right: 15px;">TỔNG:</b>'+formatMoney(cartPrice_old)+' Đ'
-                        cartElement.querySelector('.cart-price-discount i').innerText = formatMoney(cartPrice_discount);
+                        cartElement.querySelector('.cart-price-discount i').innerText = formatMoney(money['discountValue']);
                         cartElement.querySelector('.cart-price-pay').innerHTML = '<b style="margin-right: 15px;">THANH TOÁN:</b>'+formatMoney(cartPrice_current)+' Đ';
                     })                    
 
@@ -331,18 +338,20 @@
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        code: parentElement.querySelector('input').value,
-                        cartPrice: cartPrice_old
+                        code: parentElement.querySelector('input').value
                     },
                 })
                 .done(function(data) {
                     if (data.status) {
-                        cartPrice_old = data.cartPrice_old;
-                        cartPrice_discount = data.cartPrice_discount;
-                        cartPrice_current = data.cartPrice_new;
-                        discountCode = data.code;
+                        var money = calcMoney(cartPrice_old, data.discountType, data.discountValue);
+                        cartDiscount['id'] = data.id;
+                        cartDiscount['code'] = data.code;
+                        cartDiscount['type'] = data.discountType;
+                        cartDiscount['value'] = data.discountValue;
+                        cartPrice_current = money['price_current'];
+
                         cartElement.querySelector('.cart-price-all').innerHTML = '<b style="margin-right: 15px;">TỔNG:</b>'+formatMoney(cartPrice_old)+' Đ'
-                        cartElement.querySelector('.cart-price-discount i').innerText = formatMoney(cartPrice_discount);
+                        cartElement.querySelector('.cart-price-discount i').innerText = formatMoney(money['discountValue']);
                         cartElement.querySelector('.cart-price-pay').innerHTML = '<b style="margin-right: 15px;">THANH TOÁN:</b>'+formatMoney(cartPrice_current)+' Đ';
                     } else {
                         ShowMsgBox('Lỗi', data.message, 'OK', 'fail');
@@ -351,6 +360,28 @@
                 .fail(function() {
                     ShowMsgBox('Lỗi mạng', 'Kiểm tra kết nối mạng', 'OK', 'fail');
                 })                
+            }
+
+            function calcMoney(price_current, discountType, discountValue) {
+                var data = new Array();
+                data['price_old'] = price_current;
+                if (discountValue == 0) {
+                    data['discountValue'] = 0;
+                    data['price_current'] = price_current;
+                } else if (discountType == 1) {
+                    data['price_current'] = price_current-discountValue;
+                    if (data['price_current'] < 0){
+                        data['discountValue'] = price_current;
+                        data['price_current'] = 0;
+                    } else {
+                        data['discountValue'] = discountValue;
+                    }
+                } else {
+                    data['discountValue'] = price_current/100*discountValue;
+                    data['price_current'] = price_current-data['discountValue'];
+                }
+
+                return data;
             }
 
             // click nút quay lại trên giỏ hàng
@@ -373,7 +404,7 @@
                         price: cartPrice_current,
                         note: cartElement.querySelector('textarea').value,
                         table: document.getElementById('address').getAttribute('data-table'),
-                        voucher: discountCode
+                        voucher: cartDiscount['id']
                     },
                 })
                 .done(function(data) {
@@ -407,7 +438,6 @@
 
             // Thanh toán Offline
             document.querySelector('.btn-pay-offline').onclick = function() {
-                console.log(cartProduct);
                 var orderId = new Date().getTime();
                 $.ajax({
                     url: '/api/Order/offline',
@@ -419,7 +449,7 @@
                         price: cartPrice_current,
                         note: cartElement.querySelector('textarea').value,
                         table: document.getElementById('address').getAttribute('data-table'),
-                        voucher: discountCode
+                        voucher: cartDiscount['id']
                     },
                 })
                 .done(function(data) {

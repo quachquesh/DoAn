@@ -29,17 +29,14 @@ class Order_modal extends CI_Model {
 
 	function insertOrder($data, $status)
 	{
-		$orders = array(
-			'id' => $data['id'], 
-			'price' => $data['price'], 
-			'note' => $data['note'], 
-			'tableId' => $data['tableId'],
-			'voucher' => $data['voucher'],
-			'status' => $status
-		);
-
+		foreach ($data as $key => $value) {
+			if ($key != 'productList') {
+				$order[$key] = $value;
+			}
+		}
+		$order['status'] = $status;
 		$this->db->trans_start();
-		$this->db->insert('orders', $orders);
+		$this->db->insert('orders', $order);
 		foreach ($data['productList'] as $value) {
 			$order_details = array(
 				'orderId' => $data['id'],

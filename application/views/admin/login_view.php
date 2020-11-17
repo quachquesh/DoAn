@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +50,7 @@
 			document.querySelector('.loading').style.display = 'unset';
 			btnLogin.style.display = 'none';
 			$.ajax({
-				url: '/api/Login/Admin',
+				url: '/api/Login/admin',
 				type: 'POST',
 				dataType: 'json',
 				data: {

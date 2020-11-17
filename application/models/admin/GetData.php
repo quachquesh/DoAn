@@ -14,15 +14,17 @@ class GetData extends CI_Model {
 	{
 		$this->db->select('*');
 		if ($id != -1) {
-			$this->db->where('userId', $id);
+			$this->db->where('id', $id);
 		}
-		return $this->db->get('admins')->result_array();
+		return $this->db->get('admin_users')->result_array();
 	}
 
-	public function getDuty()
+	public function getRole($id = -1)
 	{
 		$this->db->select('*');
-		return $this->db->get('admin_duty_level')->result_array();
+		if ($id !== -1)
+			$this->db->where('id', $id);
+		return $this->db->get('admin_role')->result_array();
 	}
 
 	public function getProduct($id = -1)

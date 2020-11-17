@@ -22,12 +22,12 @@ class VoucherManager extends CI_Model {
 		return $this->db->update('vouchers', $data);
 	}
 
-	public function useVoucherCount($code)
+	public function useVoucherCount($id)
 	{
-		$this->db->where('code', $code);
+		$this->db->where('id', $id);
 		$voucher = $this->db->get('vouchers')->row_array();
 		$data = array('count' => ($voucher['count'] - 1));
-		$this->db->where('code', $code);
+		$this->db->where('id', $id);
 		return $this->db->update('vouchers', $data);
 	}
 }

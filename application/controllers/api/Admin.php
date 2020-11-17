@@ -6,13 +6,13 @@ class Admin extends CI_Controller {
 	{
 		parent::__construct();
 		// check có phải admin không
-		if(!$this->session->userdata('level')){
+		if (!$this->session->userdata('role')) {
 			$this->output->set_status_header(500);
 			die();
 		}
 	}
 
-	public function index()
+	function index()
 	{
 		
 	}
@@ -21,7 +21,7 @@ class Admin extends CI_Controller {
 	public function accountAdmin($id = -1)
 	{
 		// Kiểm tra quyền
-		if(!$this->session->userdata('accountManager')){
+		if($this->session->userdata('role') != 1){
 			$this->output->set_status_header(500);
 			die();
 		} else {
@@ -33,8 +33,12 @@ class Admin extends CI_Controller {
 		if ($method == "GET") { // [GET] Lấy dữ liệu account
 			if ($id === -1) {
 				$res = $this->GetData->getAccountAdmin();
+				foreach ($res as $key => $value) {
+					unset($res[$key]['password']);
+				}
 			} else {
 				$res = $this->GetData->getAccountAdmin($id);
+				unset($res[0]['password']);
 				if (!$res) {
 					$res['status'] = false;
 					$res['message'] = 'Không tìm thấy thông tin';
@@ -56,7 +60,7 @@ class Admin extends CI_Controller {
 				$data['lastName'] = $this->input->post('lastName');
 				$data['email'] = $this->input->post('email');
 				$data['phoneNumber'] = $this->input->post('phoneNumber');
-				$data['level'] = $this->input->post('level');
+				$data['role'] = $this->input->post('level');
 
 				$res['status'] = true;
 
@@ -103,7 +107,7 @@ class Admin extends CI_Controller {
 				}
 				if ($res['status'] == true) {
 					$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-					$data['createBy'] = $this->session->userdata('userName');
+					$data['createBy'] = $this->session->userdata('id');
 					$this->load->model('admin/CreateUser');
 					if ($this->CreateUser->AddData($data)) {
 						$res['message'] = "Tạo tài khoản thành công";
@@ -130,7 +134,7 @@ class Admin extends CI_Controller {
 	public function product($id = -1)
 	{
 		// Kiểm tra quyền
-		if(!$this->session->has_userdata('productManager')) {
+		if($this->session->userdata('role') != 1){
 			$this->output->set_status_header(500);
 			die();
 		} else {
@@ -311,7 +315,7 @@ class Admin extends CI_Controller {
 	public function productType($code = "")
 	{
 		// Kiểm tra quyền
-		if(!$this->session->has_userdata('productManager')) {
+		if($this->session->userdata('role') != 1){
 			$this->output->set_status_header(500);
 			die();
 		} else {
@@ -419,7 +423,7 @@ class Admin extends CI_Controller {
 		// }
 
 		// Kiểm tra quyền
-		if(!$this->session->has_userdata('orderManager')) {
+		if(!$this->session->has_userdata('role')) {
 			$this->output->set_status_header(500);
 			die();
 		} else {
@@ -443,7 +447,7 @@ class Admin extends CI_Controller {
 	public function orderOffline($id = -1)
 	{
 		// Kiểm tra quyền
-		if(!$this->session->has_userdata('orderManager')) {
+		if(!$this->session->has_userdata('role')) {
 				$this->output->set_status_header(500);
 				die();
 		} else {
@@ -495,7 +499,7 @@ class Admin extends CI_Controller {
 				break;
 			case 'POST':
 				if ($id != -1) {
-					if ($this->OrderManager->applyOrderOffline($id)) {
+					if ($this->OrderManager->applyOrderOffline($id, $this->session->userdata('id'))) {
 						$res['status'] = true;
 						$res['message'] = 'Xác nhận đơn <b>'.$id.'</b> thành công';
 					} else {
@@ -532,7 +536,7 @@ class Admin extends CI_Controller {
 	public function orderOnline($id = -1)
 	{
 		// Kiểm tra quyền
-		if(!$this->session->has_userdata('orderManager')) {
+		if(!$this->session->has_userdata('role')) {
 			$this->output->set_status_header(500);
 			die();
 		} else {
@@ -584,7 +588,7 @@ class Admin extends CI_Controller {
 				break;
 			case 'POST':
 				if ($id != -1) {
-					if ($this->OrderManager->applyOrderOnline($id)) {
+					if ($this->OrderManager->applyOrderOnline($id, $this->session->userdata('id'))) {
 						$res['status'] = true;
 						$res['message'] = 'Duyệt đơn <b>'.$id.'</b> thành công';
 					} else {
@@ -607,7 +611,7 @@ class Admin extends CI_Controller {
 	public function orderSuccess($id = -1)
 	{
 		// Kiểm tra quyền
-		if(!$this->session->has_userdata('orderManager')) {
+		if(!$this->session->has_userdata('role')) {
 				$this->output->set_status_header(500);
 				die();
 		} else {
@@ -659,7 +663,7 @@ class Admin extends CI_Controller {
 				break;
 			case 'POST':
 				if ($id != -1) {
-					if ($this->OrderManager->applyOrderSuccess($id)) {
+					if ($this->OrderManager->applyOrderSuccess($id, $this->session->userdata('id'))) {
 						$res['status'] = true;
 						$res['message'] = 'Hoàn thành đơn <b>'.$id.'</b> thành công';
 					} else {
@@ -696,7 +700,7 @@ class Admin extends CI_Controller {
 	public function voucher($id = -1)
 	{
 		// Kiểm tra quyền
-		if(!$this->session->has_userdata('voucherManager')) {
+		if($this->session->userdata('role') != 1) {
 			$this->output->set_status_header(500);
 			die();
 		} else {

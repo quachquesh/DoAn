@@ -54,7 +54,7 @@ class Login extends CI_Controller {
 			$this->output->set_status_header(500);
 		}
 	}
-	public function Admin()
+	public function admin()
 	{
 		$method = $this->input->server('REQUEST_METHOD');
 		if ($method == "POST") {
@@ -70,12 +70,16 @@ class Login extends CI_Controller {
 			}
 
 			if (isset($check) && $checkPwd){
-				$this->load->model('admin/DataUser');
-				$dulieu = $this->DataUser->getData($username);
+				unset($check['password']);
+				$dulieu = $check;
 				
 				foreach ($dulieu as $key => $value) {
 					$data[$key] = $value;
 				}
+
+				$this->load->model('admin/GetData');
+				$data['roleName'] = $this->GetData->getRole($data['role'])[0]["name"];
+
 
 				$this->session->set_userdata($data);
 

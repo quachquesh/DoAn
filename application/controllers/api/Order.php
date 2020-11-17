@@ -45,10 +45,13 @@ class Order extends CI_Controller {
 				$data['price'] = $this->input->post('price');
 				$data['note'] = $this->input->post('note');
 				$data['tableId'] = $this->input->post('table');
-				$data['voucher'] = $this->input->post('voucher');
-				$this->load->model('admin/VoucherManager');
-				$this->VoucherManager->useVoucherCount($data['voucher']);
-				
+
+				if ($this->input->post('voucher') != 0) {
+					$data['voucher'] = $this->input->post('voucher');
+					$this->load->model('admin/VoucherManager');
+					$this->VoucherManager->useVoucherCount($data['voucher']);
+				}
+				$data['payment'] = 1;
 				if ($this->Order_modal->onlinePayment($data)) {
 					$res['status'] = true;
 					$res['message'] = 'Tạo hóa đơn thành công';
@@ -75,10 +78,13 @@ class Order extends CI_Controller {
 				$data['price'] = $this->input->post('price');
 				$data['note'] = $this->input->post('note');
 				$data['tableId'] = $this->input->post('table');
-				$data['voucher'] = $this->input->post('voucher');
-				$this->load->model('admin/VoucherManager');
-				$this->VoucherManager->useVoucherCount($data['voucher']);
 
+				if ($this->input->post('voucher') != 0) {
+					$data['voucher'] = $this->input->post('voucher');
+					$this->load->model('admin/VoucherManager');
+					$this->VoucherManager->useVoucherCount($data['voucher']);
+				}
+				$data['payment'] = 2;
 				if ($this->Order_modal->offline($data)) {
 					$res['status'] = true;
 					$res['message'] = 'Đặt hàng thành công';
@@ -86,7 +92,6 @@ class Order extends CI_Controller {
 					$res['status'] = false;
 					$res['message'] = 'Đặt hàng thất bại';
 				}
-
 				$this->output
 		        ->set_content_type('application/json')
 		        ->set_output(json_encode($res))
@@ -107,7 +112,6 @@ class Order extends CI_Controller {
 			}
 
 			if (!isset($res['status'])) {
-				$cartPrice = $this->input->post('cartPrice');
 				$this->load->model('admin/GetData');
 
 				$voucher = $this->GetData->getVoucherByCode($code);
@@ -124,21 +128,10 @@ class Order extends CI_Controller {
 						$res['message'] = 'Mã khuyến mãi đã hết lượt sử dụng';
 					} else {
 						$res['status'] = true;
+						$res['id'] = $voucher['id'];
 						$res['code'] = $voucher['code'];
-						$res['cartPrice_old'] = $cartPrice;
-
-						if ($voucher['discountType']){
-							$res['cartPrice_new'] = $cartPrice - $voucher['discountValue'];
-							$res['cartPrice_discount'] = $voucher['discountValue'];
-						} else {
-							$res['cartPrice_discount'] = $cartPrice/100*$voucher['discountValue'];
-							$res['cartPrice_new'] = $cartPrice - $res['cartPrice_discount'];
-						}
-
-						if ($res['cartPrice_new'] < 0) {
-							$res['cartPrice_new'] = 0;
-							$res['cartPrice_discount'] = $cartPrice;
-						}
+						$res['discountType'] = $voucher['discountType'];
+						$res['discountValue'] = $voucher['discountValue'];
 					}
 				} else {
 					$res['status'] = false;

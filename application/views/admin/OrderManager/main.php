@@ -12,22 +12,22 @@
 	</div>
 </div>
 <div class="inner__button">
-	<?php $orderManager = $this->session->userdata('orderManager');
-	if ($orderManager == 1 || $orderManager == 3)
+	<?php $role = $this->session->userdata('role');
+	if ($role == 3) {
 		echo '<div id="OrderWait" class="btn-load-page btn btn-trans active">Chưa thanh toán</div>';
-	if ($orderManager == 1 || $orderManager == 2)
-		echo '<div id="OrderDone" class="btn-load-page btn btn-trans">Đã thanh toán</div>';
-	if ($orderManager == 1 || $orderManager == 3)
 		echo '<div id="OrderSuccess" class="btn-load-page btn btn-trans">Pha chế xong</div>';
+	}
+	if ($role == 2)
+		echo '<div id="OrderDone" class="btn-load-page btn btn-trans">Đã thanh toán</div>';
 	?>
 </div>
 <div id="inner__body" class="inner__body row" data-body="OrderWait">
 	<!-- include main -->
 	<?php
-	if ($orderManager == 1 || $orderManager == 3)
+	if ($role == 3)
 		include "orderWait.php";
-	else if ($orderManager == 1 || $orderManager == 2)
-		include "OrderSuccess.php";
+	else if ($role == 2)
+		include "OrderDone.php";
 	?>
 
 </div>
@@ -36,7 +36,7 @@
 
 <script>
 
-	<?php if ($orderManager == 2): ?>
+	<?php if ($role == 2): ?>
 		document.getElementById('OrderDone').classList.add('active');
 		document.getElementById('inner__body').setAttribute('data-body', 'OrderDone');
 	<?php endif ?>
