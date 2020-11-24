@@ -12,8 +12,8 @@
 					<?php foreach ($data as $key => $value): ?>
 					<tr>
 						<td class="order-id"><?php echo $value['id'] ?></td>
-						<?php $value['price'] = number_format($value['price'], 0, ',', '.'); ?>
-						<td class="order-price"><?php echo $value['price'] ?></td>
+						<?php $value['pricePayment'] = number_format($value['pricePayment'], 0, ',', '.'); ?>
+						<td class="order-price"><?php echo $value['pricePayment'] ?></td>
 						<td class="order-table"><?php echo $value['tableId'] ?></td>
 						<td class="btn-done order-btn">
 							<span class="material-icons info" style="background-color: #2973D7;">info</span>
@@ -28,7 +28,7 @@
 	</div>
 </div>
 
-<script>
+<script type="text/javascript">
 	// Duyệt đơn
 	document.querySelectorAll('.list-order .btn-done .done').forEach( function(element) {
 		element.onclick = function() {
@@ -37,13 +37,37 @@
 		}
 	});
 
-	// Xóa đơn
+	// Hủy đơn
 	document.querySelectorAll('.list-order .btn-done .remove').forEach( function(element) {
 		element.onclick = function() {
 			var parentElement = this.parentElement.parentElement;
 			var id = parentElement.querySelector('.order-id').innerText;
-			ShowQuestionBox('Bạn chắc chắn muốn xóa đơn hàng <b>'+id+'</b>?', function() {
-				OrderOffline(parentElement, 'DELETE')
+			ShowInputBox({
+				title: 'Lý do hủy đơn '+id,
+				selectOption: {
+								'Khách hàng yêu cầu hủy đơn': 'Khách hàng yêu cầu hủy đơn',
+								'Không có khách hàng tại bàn': 'Không có khách hàng tại bàn',
+								'input': 'Khác'
+							},
+				func: function(value) {
+					$.ajax({
+						url: '/api/Admin/cancelOrderOffline/'+id,
+						type: 'POST',
+						dataType: 'json',
+						data: {reason: value}
+					})
+					.done(function(data) {
+						if (data.status) {
+							parentElement.remove();
+							ShowMsgModal('Thành công', data.message);
+						} else {
+							ShowMsgModal('Thất bại', data.message, 3, 'danger');
+						}
+					})
+					.fail(function() {
+						ShowMsgModal('Lỗi', 'Kiểm tra kết nối mạng', 3, 'danger');
+					})
+				}
 			});
 		}
 	});
@@ -70,9 +94,6 @@
 		.fail(function() {
 			ShowMsgModal('Lỗi', 'Kiểm tra kết nối mạng', 3, 'danger');
 		})
-		.always(function() {
-			// console.log("complete");
-		});
 	}
 
 
@@ -102,7 +123,7 @@
 			});
 
 			data.forEach( function(value) {
-				var price = formatMoney(value.price);
+				var price = formatMoney(value.pricePayment);
 				var html = `<tr>
 							 	<td class="order-id">${value.id}</td>
 							 	<td class="order-price">${price}</td>
@@ -123,8 +144,35 @@
 
 				element.querySelector('.btn-done .remove').onclick = function() {
 					var id = element.querySelector('.order-id').innerText;
-					ShowQuestionBox('Bạn chắc chắn muốn xóa đơn hàng <b>'+id+'</b>?', function() {
-						OrderOffline(element, 'DELETE')
+					// ShowQuestionBox('Bạn chắc chắn muốn xóa đơn hàng <b>'+id+'</b>?', function() {
+					// 	OrderOffline(element, 'DELETE')
+					// });
+					ShowInputBox({
+						title: 'Lý do hủy đơn '+id,
+						selectOption: {
+										'Khách hàng yêu cầu hủy đơn': 'Khách hàng yêu cầu hủy đơn',
+										'Không có khách hàng tại bàn': 'Không có khách hàng tại bàn',
+										'input': 'Khác'
+									},
+						func: function(value) {
+							$.ajax({
+								url: '/api/Admin/cancelOrderOffline/'+id,
+								type: 'POST',
+								dataType: 'json',
+								data: {reason: value}
+							})
+							.done(function(data) {
+								if (data.status) {
+									element.remove();
+									ShowMsgModal('Thành công', data.message);
+								} else {
+									ShowMsgModal('Thất bại', data.message, 3, 'danger');
+								}
+							})
+							.fail(function() {
+								ShowMsgModal('Lỗi', 'Kiểm tra kết nối mạng', 3, 'danger');
+							})
+						}
 					});
 				}
 

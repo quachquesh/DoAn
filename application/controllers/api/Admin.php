@@ -448,8 +448,8 @@ class Admin extends CI_Controller {
 	{
 		// Kiểm tra quyền
 		if(!$this->session->has_userdata('role')) {
-				$this->output->set_status_header(500);
-				die();
+			$this->output->set_status_header(500);
+			die();
 		} else {
 			$this->load->model('admin/OrderManager');
 			$this->load->model('admin/GetData');
@@ -529,6 +529,36 @@ class Admin extends CI_Controller {
 				break;
 			default:
 				$this->output->set_status_header(500);
+				break;
+		}
+	}
+
+	public function cancelOrderOffline($id = -1)
+	{
+		// Kiểm tra quyền
+		if(!$this->session->has_userdata('role')) {
+			$this->output->set_status_header(500);
+			die();
+		} else {
+			$this->load->model('admin/OrderManager');
+		}
+
+		switch ($this->input->server('REQUEST_METHOD')) {
+			case 'POST':
+				$data['cancelReason'] = $this->input->post('reason');
+
+				if ($this->OrderManager->orderCancel($id, $data, $this->session->userdata('id'))) {
+					$res['status'] = true;
+					$res['message'] = 'Hủy đơn <b>'.$id.'</b> thành công';
+				} else {
+					$res['status'] = false;
+					$res['message'] = 'Hủy đơn <b>'.$id.'</b> thất bại';
+				}
+
+				$this->output
+			        ->set_content_type('application/json')
+			        ->set_output(json_encode($res))
+			        ->set_status_header(200);
 				break;
 		}
 	}
@@ -686,6 +716,34 @@ class Admin extends CI_Controller {
 					$res['message'] = "Xóa đơn <b>$id</b> thất bại";
 				}
 
+				$this->output
+			        ->set_content_type('application/json')
+			        ->set_output(json_encode($res))
+			        ->set_status_header(200);
+				break;
+			default:
+				$this->output->set_status_header(500);
+				break;
+		}
+	}
+
+	public function orderHistory()
+	{
+		// Kiểm tra quyền
+		if(!$this->session->has_userdata('role')) {
+			$this->output->set_status_header(500);
+			die();
+		} else {
+			$this->load->model('admin/GetData');
+		}
+
+		switch ($this->input->server('REQUEST_METHOD')) {
+			case 'GET':
+				if ($this->input->get('startTime') && $this->input->get('endTime')) {
+					$res = $this->GetData->getOrderHistory($this->input->get('startTime'), $this->input->get('endTime'));
+				} else {
+					$res = $this->GetData->getOrderHistory();
+				}
 				$this->output
 			        ->set_content_type('application/json')
 			        ->set_output(json_encode($res))

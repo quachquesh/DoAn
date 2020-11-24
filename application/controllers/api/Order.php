@@ -42,7 +42,9 @@ class Order extends CI_Controller {
 			if ($id === -1) {
 				$data['id'] = $this->input->post('id');
 				$data['productList'] = $this->input->post('product');
-				$data['price'] = $this->input->post('price');
+				$data['priceOrder'] = $this->input->post('priceOrder');
+				$data['priceDiscount'] = $this->input->post('priceDiscount');
+				$data['pricePayment'] = $this->input->post('pricePayment');
 				$data['note'] = $this->input->post('note');
 				$data['tableId'] = $this->input->post('table');
 
@@ -75,7 +77,9 @@ class Order extends CI_Controller {
 			if ($id === -1) {
 				$data['id'] = $this->input->post('id');
 				$data['productList'] = $this->input->post('product');
-				$data['price'] = $this->input->post('price');
+				$data['priceOrder'] = $this->input->post('priceOrder');
+				$data['priceDiscount'] = $this->input->post('priceDiscount');
+				$data['pricePayment'] = $this->input->post('pricePayment');
 				$data['note'] = $this->input->post('note');
 				$data['tableId'] = $this->input->post('table');
 

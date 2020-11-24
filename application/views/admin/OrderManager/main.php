@@ -27,7 +27,7 @@
 	if ($role == 3)
 		include "orderWait.php";
 	else if ($role == 2)
-		include "OrderDone.php";
+		include "orderDone.php";
 	?>
 
 </div>

@@ -66,7 +66,7 @@ class OrderManager extends CI_Controller {
 	{
 		$data = $this->GetData->getOrderSuccess();
 		$data = array('data' => $data);
-		$this->load->view('admin/OrderManager/OrderSuccess', $data, false);
+		$this->load->view('admin/OrderManager/orderSuccess', $data, false);
 	}
 }
 

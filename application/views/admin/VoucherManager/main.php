@@ -35,7 +35,7 @@
 									<td class="text-center"><?php echo $value['discountValue']; echo $value['discountType']==0?'%':'đ'; ?></td>
 									<td class="text-center"><?php echo $value['count']; ?></td>
 									<td class="text-center time"><?php echo date("d/m/Y", $value['timeStart']); ?></td>
-									<td class="text-center time"><?php echo date("d/m/Y", $value['timeStart']); ?></td>
+									<td class="text-center time"><?php echo date("d/m/Y", $value['timeEnd']); ?></td>
 									<td class="btn-group">
 										<div class="btn-edit material-icons">edit</div>
 									</td>

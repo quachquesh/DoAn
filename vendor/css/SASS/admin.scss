@@ -552,6 +552,35 @@ body {
 	background-color: var(--background-card);
 }
 
+// DashBoard
+#dashboard {
+	.dashboard-title {
+		font-size: 24px;
+	    font-weight: 600;
+	    background-color: rgba(0, 0, 255, 0.1);
+	    padding: 2px 20px;
+	    border: 2px solid #0000ff90;
+	    user-select: none;
+	}
+	.date-pick {
+		float: right;
+
+		label {
+			font-size: 16px;
+		}
+		input,
+		select {
+			font-size: 16px;
+			padding: 2px 3px;
+		}
+
+		label[for="date"] {
+			margin-left: 20px;
+		}
+	}
+}
+// End DashBoard
+
 // Show product type
 #show-product-type {
 	width: 100%;
@@ -1718,4 +1747,76 @@ body {
 			}
 		}
 	}
+}
+
+.message-input-box {
+	display: flex;
+	position: absolute;
+	z-index: 10;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.1);
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
+	opacity: 0;
+	visibility: hidden;
+	transition: linear .3s;
+
+	&.show {
+		opacity: 1;
+		visibility: unset;
+	}
+
+	.msgi-body {
+		background-color: #ffffff;
+		padding: 5px 8px;
+
+		.msgi-title {
+			font-size: 16px;
+			margin-bottom: 8px;
+		}
+
+		.msgi-option {
+			width: 100%;
+			padding: 3px 5px;
+			font-size: 16px;
+			display: block;
+		}
+
+		.msgi-input {
+			margin-top: 15px;
+			width: 100%;
+			padding: 3px 5px;
+			font-size: 16px;
+			display: none;
+		}
+
+		.msgi-button-group {
+			margin-top: 20px;
+			float: right;
+
+			.msgi-btn-apply {
+				padding: 5px 10px;
+				text-transform: uppercase;
+				background-color: green;
+				border-radius: 5px;
+				color: #fff;
+				font-size: 18px;
+			}
+			.msgi-btn-cancel {
+				padding: 5px 10px;
+				text-transform: uppercase;
+				background-color: red;
+				border-radius: 5px;
+				color: #fff;
+				font-size: 18px;
+			}
+
+		}
+
+	}
+
 }

@@ -13,14 +13,12 @@ class Order_modal extends CI_Model {
 	public function onlinePayment($data)
 	{
 		return $this->insertOrder($data, 0);
-
 	}
 	
 	public function online($data)
 	{
 		return $this->insertOrder($data, 2);
 	}
-
 
 	public function offline($data)
 	{

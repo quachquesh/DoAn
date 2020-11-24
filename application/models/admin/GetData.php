@@ -79,11 +79,13 @@ class GetData extends CI_Model {
 		return $this->db->get('orders')->result_array();
 	}
 
-	public function getOrderHistory()
+	public function getOrderHistory($start = -1, $end = -1)
 	{
-		$this->db->select('*');
-		$this->db->where('status', 4);
-		return $this->db->get('orders')->result_array();
+		if ($start !== -1 && $end !== -1)
+			$sql = "SELECT * FROM orders where (status = '4' or status = '5') and id > ".$start." and id < ".$end;
+		else
+			$sql = "SELECT * FROM orders where status = '4' or status = '5'";
+		return $this->db->query($sql)->result_array();
 	}
 
 	public function getOrderDetail($orderId = -1)

@@ -57,6 +57,11 @@ class OrderManager extends CI_Model {
 			return false;
 		}
 	}
+
+	public function orderCancel($id, $data, $user)
+	{
+		return $this->applyOrder($id, $user, 5);
+	}
 }
 
 /* End of file OrderManager.php */

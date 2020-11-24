@@ -31,8 +31,8 @@
 							<circle cx="70" cy="70" r="70"></circle>
 						</svg>
 					</div>
-					<div class="app-main__inner" id="app-main__inner" data-inner="DashBoard">
-						<?php include __DIR__ . '/../dashboard_view.php'; ?>
+					<div class="app-main__inner" id="app-main__inner" data-inner="DashBoardManager">
+						<?php include __DIR__ . '/../DashBoardManager/main.php'; ?>
 					</div>
 				</div>
 			</div>
@@ -48,6 +48,17 @@
 		</div>
 	</div>
 
+	<div class="message-input-box" id="message-input-box">
+		<div class="msgi-body">
+			<h6 class="msgi-title"></h6>
+			<select class="msgi-option" name="reason-option"></select>
+			<input type="text" class="msgi-input">
+			<div class="msgi-button-group">
+				<div class="msgi-btn-apply btn">Xác nhận</div>
+				<div class="msgi-btn-cancel btn">Hủy</div>
+			</div>
+		</div>
+	</div>
 	
 	<div class="message-modal" id="message-modal"></div>
 	<div class="question-box" id="question-box"></div>

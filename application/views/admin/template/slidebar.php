@@ -1,15 +1,15 @@
 <div class="app-slidebar">
 	<div class="app-slidebar__inner">
 		<ul class="nav-menu">
+			<?php if ($this->session->userdata('role') == 1): ?>
 			<li>
-				<div id="DashBoard" class="nav-menu__title slidebar-btn active">
+				<div id="DashBoardManager" class="nav-menu__title slidebar-btn active">
 					<div class="nav-menu__title-name">
 						<div class="icon-menu material-icons">dashboard</div>
-						DashBoard
+						Thống kê
 					</div>
 				</div>
 			</li>
-			<?php if ($this->session->userdata('role') == 1): ?>
 			<li>
 				<div id="AccountManager" class="nav-menu__title slidebar-btn">
 					<div  class="nav-menu__title-name">

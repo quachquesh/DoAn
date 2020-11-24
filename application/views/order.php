@@ -156,6 +156,7 @@
             cartDiscount['code'] = "";
             cartDiscount['type'] = 0;
             cartDiscount['value'] = 0;
+            cartDiscount['price'] = 0;
             var cartPrice_old = 0;
             var cartPrice_current = 0;
             // Số lượng giỏ hàng
@@ -273,6 +274,7 @@
 
                                                 // Cập nhật lại giá
                                                 var money = calcMoney(cartPrice_old, cartDiscount['type'], cartDiscount['value']);
+                                                cartDiscount['price'] = money['discountValue'];
                                                 cartPrice_current = money['price_current'];
 
                                                 cartElement.querySelector('.cart-price-all').innerHTML = '<b style="margin-right: 15px;">TỔNG:</b>'+formatMoney(cartPrice_old)+' Đ'
@@ -318,6 +320,7 @@
                         }
 
                         var money = calcMoney(cartPrice_old, cartDiscount['type'], cartDiscount['value']);
+                        cartDiscount['price'] = money['discountValue'];
                         cartPrice_current = money['price_current'];
 
                         cartElement.querySelector('.cart-price-all').innerHTML = '<b style="margin-right: 15px;">TỔNG:</b>'+formatMoney(cartPrice_old)+' Đ'
@@ -348,6 +351,7 @@
                         cartDiscount['code'] = data.code;
                         cartDiscount['type'] = data.discountType;
                         cartDiscount['value'] = data.discountValue;
+                        cartDiscount['price'] = money['discountValue'];
                         cartPrice_current = money['price_current'];
 
                         cartElement.querySelector('.cart-price-all').innerHTML = '<b style="margin-right: 15px;">TỔNG:</b>'+formatMoney(cartPrice_old)+' Đ'
@@ -401,7 +405,9 @@
                     data: {
                         id: id,
                         product: cartProduct,
-                        price: cartPrice_current,
+                        priceOrder: cartPrice_old,
+                        priceDiscount: cartDiscount['price'],
+                        pricePayment: cartPrice_current,
                         note: cartElement.querySelector('textarea').value,
                         table: document.getElementById('address').getAttribute('data-table'),
                         voucher: cartDiscount['id']
@@ -446,7 +452,9 @@
                     data: {
                         id: orderId,
                         product: cartProduct,
-                        price: cartPrice_current,
+                        priceOrder: cartPrice_old,
+                        priceDiscount: cartDiscount['price'],
+                        pricePayment: cartPrice_current,
                         note: cartElement.querySelector('textarea').value,
                         table: document.getElementById('address').getAttribute('data-table'),
                         voucher: cartDiscount['id']

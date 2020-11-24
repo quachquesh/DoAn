@@ -93,3 +93,46 @@ function ShowQuestionBox(content, func) {
 	}
 
 }
+
+function ShowInputBox(option) {
+	var messageInput = document.getElementById('message-input-box');
+	var inputElement = messageInput.querySelector('.msgi-input');
+	var selectElement = messageInput.querySelector('.msgi-option');
+	messageInput.querySelector('.msgi-title').innerText = option.title;
+	selectElement.innerHTML = "";
+	for (var key in option.selectOption) {
+		$('#message-input-box .msgi-option').append('<option value="'+key+'">'+option.selectOption[key]+'</option>');
+	}
+
+	option.input = option.input ? true : false;
+	if (option.input == true)
+		inputElement.style.display = 'block';
+	else 
+		inputElement.style.display = 'none';
+
+	messageInput.classList.add('show');
+
+	selectElement.onchange = function() {
+		if (option.input == true){
+			inputElement.style.display = 'block';
+		} else if (selectElement.value == 'input') {
+			inputElement.style.display = 'block';
+		} else {
+			inputElement.style.display = 'none';
+		}
+	}
+
+	messageInput.querySelector('.msgi-btn-apply').onclick = function() {
+		var value = "";
+		if (selectElement.value != 'input')
+			value = selectElement.value;
+		else
+			value = inputElement.value;
+		option.func(value);
+		messageInput.classList.remove('show');
+	}
+
+	messageInput.querySelector('.msgi-btn-cancel').onclick = function() {
+		messageInput.classList.remove('show');
+	}
+}
