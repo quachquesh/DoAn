@@ -45,9 +45,9 @@
 			</li>
 			<?php endif ?>
 
-			<?php if ($this->session->userdata('role') > 1): ?>
+			<?php if ($this->session->userdata('role') != 1): ?>
 			<li>
-				<div id="OrderManager" class="nav-menu__title slidebar-btn">
+				<div id="OrderManager" class="nav-menu__title slidebar-btn active">
 					<div  class="nav-menu__title-name">
 						<div class="icon-menu material-icons">list_alt</div>
 						<span>Đơn đặt hàng</span>

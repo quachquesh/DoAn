@@ -2,6 +2,7 @@
 var msgBoxElement = document.getElementById('message-box');
 var msgBoxOverLayElement = document.querySelector('.message-box__overlay');
 var msgBoxButtonElement = document.querySelector('.message-body__button');
+// style: success, fail
 function ShowMsgBox(title, content, button, style = "success", func) {
 	msgBoxElement.classList.add('show-box');
 

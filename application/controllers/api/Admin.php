@@ -242,6 +242,7 @@ class Admin extends CI_Controller {
 				$data['typeCode'] = $this->input->post('typeCode');
 				$data['itemsNew'] = $this->input->post('itemsNew');
 				$data['bestSeller'] = $this->input->post('bestSeller');
+				$data['business'] = $this->input->post('business');
 				$data['discountType'] = $this->input->post('discountType');
 				$data['discount'] = $this->input->post('discount');
 				$data['avt'] = $this->input->post('image-src');
@@ -299,7 +300,7 @@ class Admin extends CI_Controller {
 			} 
 
 			if ($res['status'] == false) {
-				$res['message'] = 'Xóa thất bại';
+				$res['message'] = 'Không thể xóa sản phẩm này, đã có đơn đặt hàng sản phẩm này';
 			}
 
 			$this->output
@@ -390,7 +391,7 @@ class Admin extends CI_Controller {
 				$res['message'] = 'Xóa <b style="text-transform: uppercase;">'.$code.'</b> thành công';
 			} else {
 				$res['status'] = false;
-				$res['message'] = 'Xóa <b style="text-transform: uppercase;">'.$code.'</b> thất bại';
+				$res['message'] = 'Xóa <b style="text-transform: uppercase;">'.$code.'</b> thất bại, vui lòng <b>xóa toàn bộ sản phẩm</b> thuộc loại <b style="text-transform: uppercase;">'.$code.'</b> trước';
 			}
 
 			$this->output
@@ -743,6 +744,26 @@ class Admin extends CI_Controller {
 					$res = $this->GetData->getOrderHistory($this->input->get('startTime'), $this->input->get('endTime'));
 				} else {
 					$res = $this->GetData->getOrderHistory();
+				}
+				if ($this->input->get('details')) {
+					$this->load->model('GetData');
+					$data = $this->GetData->getVoucher();
+					$arrVoucher = [];
+					foreach ($data as $value) {
+					    $arrVoucher[$value['id']] = $value['code'];
+					}
+					$data = $this->GetData->getPaymentMethod();
+					$arrPayment = [];
+					foreach ($data as $value) {
+					    $arrPayment[$value['id']] = $value['name'];
+					}
+					foreach ($res as $key => $value) {
+						if ($value['voucher'] == null)
+							$res[$key]['voucher'] = '';
+						else
+							$res[$key]['voucher'] = $arrVoucher[$value['voucher']];
+						$res[$key]['payment'] = $arrPayment[$value['payment']];
+					}
 				}
 				$this->output
 			        ->set_content_type('application/json')

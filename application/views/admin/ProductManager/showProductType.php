@@ -179,26 +179,25 @@
 	});
 
 	function editDelete(element) {
-		var element = element;
-		ShowQuestionBox('Hành động này sẽ xóa toàn bộ sản phẩm thuộc loại <b>'+element.parentElement.getAttribute('data-typename')+'</b>, bạn có chắc chắn muốn xóa?', function() {
-			var code = element.parentElement.getAttribute('data-typeCode');
+		// var element = element;
+		var code = element.parentElement.getAttribute('data-typeCode');
 
-			$.ajax({
-				url: '/api/Admin/productType/'+code,
-				type: 'DELETE',
-				dataType: 'json'
-			})
-			.done(function(data) {
-				if (data.status) {
-					element.parentElement.parentElement.remove();
-					ShowMsgModal('Thành công!', data.message, 4);
-				}
-				else
-					ShowMsgModal('Thất bại!', data.message, 4, 'danger');
-			})
-			.fail(function() {
-				ShowMsgModal('Lỗi!', 'Có lỗi xảy ra, vui lòng reload lại trang', 4, 'danger');
-			})
+		$.ajax({
+			url: '/api/Admin/productType/'+code,
+			type: 'DELETE',
+			dataType: 'json'
+		})
+		.done(function(data) {
+			if (data.status) {
+				element.parentElement.parentElement.remove();
+				ShowMsgModal('Thành công!', data.message, 4);
+			}
+			else
+				// ShowMsgModal('Thất bại!', data.message, 4, 'danger');
+				ShowMsgBox('Thất bại!', data.message, 'OK', 'fail')
+		})
+		.fail(function() {
+			ShowMsgModal('Lỗi!', 'Có lỗi xảy ra, vui lòng reload lại trang', 4, 'danger');
 		})
 	}
 

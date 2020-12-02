@@ -35,7 +35,7 @@
 									<?php endif ?>
 								</div>
 							</div>
-							<div class="product__name">
+							<div class="product__name" <?php if(!$value['business']) echo 'style="color: red;"' ?>>
 								<?php echo $value['name'] ?>
 							</div>
 							<div class="product__price">
@@ -143,6 +143,13 @@
 							<option value="1">Giá tiền</option>
 						</select>
 					</div>
+					<div class="form-group-select">
+						<label>Trạng thái: </label>
+						<select name="business">
+							<option value="0">Đóng</option>
+							<option value="1">Mở bán</option>
+						</select>
+					</div>
 
 
 					<div class="form-group" style="margin-top: 15px">
@@ -166,7 +173,7 @@
 
 	var formUpdate = document.getElementById('form-update-product');
 	var editData = {element:"", typeCode: "", image: "", id: ""};
-	formUpdate.addEventListener('submit', function(e) {
+	formUpdate.addEventListener('submit', function (e) {
 		e.preventDefault();
 		var form_data = new FormData();
 		if ($('#fileAvt').val() != "") {
@@ -176,12 +183,12 @@
 		// form_data.append('id', formUpdate.querySelector('input[name="productID"]').value);
 		formUpdate.querySelectorAll('input[name]').forEach(function(element) {
 			form_data.append(element.getAttribute('name'), element.value);
-		})
+		});
 
 		formUpdate.querySelectorAll('select').forEach(function(element) {
 			var name = element.getAttribute('name');
 			form_data.append(name, element.value);
-		})
+		});
 		form_data.append('image-src', editData.image);
 		form_data.append('image-update', formUpdate.querySelector('#fileAvt').value);
 
@@ -285,6 +292,10 @@
 
 		// cập nhật lại tên
 		editData.element.querySelector('.product__name').innerText = data.name;
+		if (data.business == false)
+			editData.element.querySelector('.product__name').style.color = "red";
+		else
+			editData.element.querySelector('.product__name').style.color = '';
 
 		// Cập nhật giá
 		var priceElement = editData.element.querySelector('.product__price');
@@ -372,7 +383,6 @@
 			dataType: 'json'
 		})
 		.done(function(data) {
-			console.log(data);
 			if (typeof data.status === 'undefined') {
 				formUpdate.querySelector('input[name="productID"]').value = data.id;
 				formUpdate.querySelector('input[name="name"]').value = data.name;
@@ -414,6 +424,26 @@
 					}
 
 				});
+				formUpdate.querySelectorAll('select[name="business"] option').forEach( function(element) {
+					if (element.value == data.business) {
+						element.selected = true;
+						let selectElement = element.parentElement;
+						if (data.business == true)
+							selectElement.style.color = "green";
+						else
+							selectElement.style.color = "red";
+
+						selectElement.onchange = function() {
+							if (this.value == false)
+								selectElement.style.color = "red";
+							else
+								selectElement.style.color = "green";
+						}
+					} else {
+						element.removeAttribute('selected');
+					}
+
+				});
 				document.querySelector('.edit-product').classList.remove('hidden');
 				document.querySelector('body').style.overflow = 'hidden';
 			}
@@ -433,7 +463,8 @@
 				parentElement.remove();
 				ShowMsgModal('Thành công!', data.message, 4);
 			} else {
-				ShowMsgModal('Thất bại!', data.message, 4, 'danger');
+				// ShowMsgModal('Thất bại!', data.message, 4, 'danger');
+				ShowMsgBox('Thất bại!', data.message, 'OK', 'fail')
 			}
 		})
 		.fail(function(data) {

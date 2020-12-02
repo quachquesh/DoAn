@@ -9,7 +9,7 @@ class Index extends CI_Controller {
 
 	public function index()
 	{
-		if ($this->session->has_userdata('role')) {
+		if ($this->session->has_userdata('role') && $this->session->userdata('role') == 1) {
 			$this->load->model('admin/GetData');
 
 			$dayNow = date('d');
@@ -47,6 +47,8 @@ class Index extends CI_Controller {
 
 			$data = array('dataPrice' => $resultPrice, 'dataOrder' => $resultOrder);
 			$this->load->view('admin/template/main', $data, false);
+		} else if ($this->session->has_userdata('role') && $this->session->userdata('role') != 1) {
+			$this->load->view('admin/template/main');
 		} else {
 			$this->load->view('admin/login_view');
 		}

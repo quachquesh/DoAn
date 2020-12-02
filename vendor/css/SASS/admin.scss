@@ -554,13 +554,46 @@ body {
 
 // DashBoard
 #dashboard {
-	.dashboard-title {
-		font-size: 24px;
-	    font-weight: 600;
-	    background-color: rgba(0, 0, 255, 0.1);
-	    padding: 2px 20px;
-	    border: 2px solid #0000ff90;
-	    user-select: none;
+	.dashboard-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 20px;
+		.dashboard-title {
+			font-size: 20px;
+		    font-weight: 600;
+		    background-color: rgba(0, 0, 255, 0.1);
+		    padding: 2px 20px;
+		    border: 2px solid #0000ff90;
+		    user-select: none;
+		}
+		div {
+			display: flex;
+			align-items: center;
+			.button-export-excel {
+				font-size: 20px;
+			    font-weight: 600;
+			    background-color: #ACF6BA;
+			    // color: #fff;
+			    padding: 2px 20px;
+			    border: 2px solid #00C851;
+			}
+			.excel-checkbox {
+				margin: 0 7px;
+				display: flex;
+    			align-items: center;
+    			cursor: pointer;
+    			user-select: none;
+				input[type="checkbox"] {
+					width: 20px;
+					height: 20px;
+				}
+				span {
+					padding-left: 3px;
+					font-size: 18px;
+				}
+			}
+		}
 	}
 	.date-pick {
 		float: right;

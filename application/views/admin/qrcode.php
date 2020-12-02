@@ -44,7 +44,12 @@
 					<div class="label-group">
 						<span>Mã QR</span>
 					</div>
-					<div id="qrcode-result"></div>
+					<div class="qrcode-box">
+						<div id="qrcode-result"></div>
+						<div class="qrcode-link" style="text-align: center; margin-top: 10px;">
+							<a href="#" style="text-decoration: none"></a>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -62,9 +67,13 @@
 
 	var form = document.getElementById('form-create-qrcode');
 	form.addEventListener('submit', function(e) {
+		let hrefValue = '<?php echo base_url() ?>order?TableId='+form.querySelector('input[name="numberTable"]').value;
 		e.preventDefault();
 		qrcode.clear();
-		qrcode.makeCode('<?php echo base_url() ?>order?TableId='+form.querySelector('input[name="numberTable"]').value);
+		qrcode.makeCode(hrefValue);
+		let qrcodeLink = document.querySelector('.qrcode-box .qrcode-link a');
+		qrcodeLink.setAttribute('href', hrefValue);
+		qrcodeLink.innerText = hrefValue;
 		ShowMsgModal('Thông báo', 'Đã tạo QR Code', 2, 'info');
 	})
 </script>

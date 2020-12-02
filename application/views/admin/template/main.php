@@ -31,9 +31,15 @@
 							<circle cx="70" cy="70" r="70"></circle>
 						</svg>
 					</div>
+					<?php if ($this->session->userdata('role') == 1): ?>
 					<div class="app-main__inner" id="app-main__inner" data-inner="DashBoardManager">
 						<?php include __DIR__ . '/../DashBoardManager/main.php'; ?>
 					</div>
+					<?php else: ?>
+					<div class="app-main__inner" id="app-main__inner" data-inner="OrderManager">
+						
+					</div>
+					<?php endif ?>
 				</div>
 			</div>
 		</div>
@@ -70,6 +76,20 @@
 
 	<script>
 		window.realtime = [];
+		<?php if ($this->session->userdata('role') != 1): ?>
+		document.querySelector('.loading-app-main').classList.remove('hidden');
+		$.ajax({
+			url: '/admin/OrderManager',
+			type: 'GET',
+			dataType: 'html'
+		})
+		.done(function(data) {
+			$('#app-main__inner').html(data);
+		})
+		.always(function() {
+			document.querySelector('.loading-app-main').classList.add('hidden');
+		});
+		<?php endif ?>
 	</script>
 </body>
 </html>

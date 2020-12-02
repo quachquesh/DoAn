@@ -16,8 +16,19 @@
 		<div class="col c-12 m-12 l-10 l-o-1">
 			<div class="card card-block">
 				<div class="card-body">
-					<div>
+					<div class="dashboard-header">
 						<span class="dashboard-title">Thống kê tiền</span>
+						<div>
+							<span class="btn button-export-excel">Xuất dữ liệu file excel</span>
+							<span class="excel-checkbox">
+								<input type="checkbox" value="success" checked>
+								<span>Thành công</span>
+							</span>
+							<span class="excel-checkbox">
+								<input type="checkbox" value="fail" checked>
+								<span>Thất bại</span>
+							</span>
+						</div>
 					</div>
 
 					<div class="date-pick">
@@ -42,8 +53,19 @@
 		<div class="col c-12 m-12 l-10 l-o-1">
 			<div class="card card-block">
 				<div class="card-body">
-					<div>
+					<div class="dashboard-header">
 						<span class="dashboard-title">Thống kê đơn hàng</span>
+						<div>
+							<span class="btn button-export-excel">Xuất dữ liệu file excel</span>
+							<span class="excel-checkbox">
+								<input type="checkbox" value="success" checked>
+								<span>Thành công</span>
+							</span>
+							<span class="excel-checkbox">
+								<input type="checkbox" value="fail" checked>
+								<span>Thất bại</span>
+							</span>
+						</div>
 					</div>
 
 					<div class="date-pick">
@@ -432,4 +454,132 @@
 	function getDaysInMonth(month,year) {
 		return new Date(year, month, 0).getDate();
 	};
+
+	// Xử lý click xuất file excel
+	document.querySelectorAll('.button-export-excel').forEach( function(element, index) {
+		element.onclick = function() {
+			let parentElement = this.parentElement.parentElement.parentElement;
+			let selectType = parentElement.querySelector('.date-pick select[name="select-type-date"]');
+		    
+		    let typeValue = selectType.value;
+
+			let time = typeValue == 'year' ? parentElement.querySelector('.date-pick select[name="date"]').value : parentElement.querySelector('.date-pick input[name="date"]').value;
+			time = new Date(time);
+		    let day = time.getDate();
+			let month = time.getMonth();            
+		    let year = time.getFullYear();
+
+		    let startTime = 0;
+		    let endTime = 0;
+
+
+		    if (typeValue == 'day') {
+		    	startTime = new Date(year, month, day).getTime();
+				endTime = new Date(year, month, day+1).getTime();
+		    } else if (typeValue == 'month') {
+		    	startTime = new Date(year, month, 1).getTime();
+				endTime = new Date(year, month+1, 1).getTime();
+		    } else if (typeValue == 'year') {
+		    	startTime = new Date(year, 0, 1).getTime();
+				endTime = new Date(year+1, 0, 1).getTime();
+		    }
+		    $.ajax({
+				url: '/api/Admin/orderHistory',
+				type: 'GET',
+				dataType: 'json',
+				data: {startTime: startTime, endTime: endTime, details: true},
+			})
+			.done(function(data) {
+				var checkBoxSuccess = parentElement.querySelector('.excel-checkbox input[type="checkbox"][value="success"]').checked;
+				var checkBoxFail = parentElement.querySelector('.excel-checkbox input[type="checkbox"][value="fail"]').checked;
+
+				let dataLength = data.length;
+				if (checkBoxSuccess === true && checkBoxFail === false) {
+					for (let i = 0; i < dataLength; i++) {
+						if (data[i].status == 5) {
+							data.splice(i, 1);
+							i--;
+							dataLength--;
+						}
+					}
+				} else if (checkBoxSuccess === false && checkBoxFail === true) {
+					for (let i = 0; i < dataLength; i++) {
+						if (data[i].status == 4) {
+							data.splice(i, 1);
+							i--;
+							dataLength--;
+						}
+					}
+				}
+
+				if (data.length !== 0)
+					DownloadJsonData(data, 'Order Data', true)
+				else
+					ShowMsgBox('Thất bại', 'Không có dữ liệu để xuất file', 'OK', 'fail')
+			})
+		}
+	});
+	function DownloadJsonData(JSONData, FileTitle, ShowLabel) {
+	    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+	    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+	    var CSV = '';
+	    //This condition will generate the Label/Header
+	    if (ShowLabel) {
+	        var row = "\uFEFF";
+	        //This loop will extract the label from 1st index of on array
+	        for (var index in arrData[0]) {
+	            //Now convert each value to string and comma-seprated
+	            row += index + ',';
+	        }
+	        row = row.slice(0, -1);
+	        //append Label row with line break
+	        CSV += row + '\r\n';
+	    }
+	    //1st loop is to extract each row
+	    for (var i = 0; i < arrData.length; i++) {
+	        var row = "\uFEFF";
+	        //2nd loop will extract each column and convert it in string comma-seprated
+	        for (var index in arrData[i]) {
+	            row += '' + arrData[i][index] + ',';
+	            // row += '"' + arrData[i][index] + '",';
+	        }
+	        row.slice(0, row.length - 1);
+	        //add a line break after each row
+	        CSV += row + '\r\n';
+	    }
+	    if (CSV == '') {
+	        alert("Invalid data");
+	        return;
+	    }
+	    //Generate a file name
+	    let date = new Date();
+	    var filename = FileTitle + ` ${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`;
+	    var blob = new Blob([CSV], {
+	        type: 'text/csv;'
+	    });
+	    if (navigator.msSaveBlob) { // IE 10+
+	        navigator.msSaveBlob(blob, filename);
+	    } else {
+	        var link = document.createElement("a");
+	        if (link.download !== undefined) { // feature detection
+	            // Browsers that support HTML5 download attribute
+	            var url = URL.createObjectURL(blob);
+	            link.setAttribute("href", url);
+	            link.style = "visibility:hidden";
+	            link.download = filename + ".csv";
+	            document.body.appendChild(link);
+	            link.click();
+	            document.body.removeChild(link);
+	        }
+	    }
+	}
+
+	document.querySelectorAll('.excel-checkbox span').forEach( function(element, index) {
+		element.onclick = function() {
+			if (this.parentElement.querySelector('input[type="checkbox"]').checked)
+				this.parentElement.querySelector('input[type="checkbox"]').checked = false;
+			else
+				this.parentElement.querySelector('input[type="checkbox"]').checked = true;
+		}
+	});
 </script>

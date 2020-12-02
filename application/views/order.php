@@ -6,129 +6,130 @@
     <link rel="icon" href="/vendor/img/order-food-32.png">
     <title>SSM Order</title>
     <link rel="stylesheet" href="/vendor/css/order.css">
-    <link rel="stylesheet" href="/vendor/css/orderResponsive.css">
     <link rel="stylesheet" href="/vendor/css/grid.css">
 </head>
 <body>
-    <header class="grid wide">
-       <div class="header">
-            <div class="header_navbar">
-                <a href="/" class="header_navbar-iconlink">
-                    <img class = "iconlink-logo"src="/vendor/img/logo.png" alt="">
-                    <span class ="iconlink-name">SSM</span>
-                </a>
-                <div class="header_navbar-cart">
-                    <span class="cart-icon material-icons-outlined">shopping_cart</span>
-                    <span class="cart-amount">0</span>
+    <div class="container">
+        <header class="grid">
+            <div class="header">
+                <div class="header_navbar">
+                    <a href="/" class="header_navbar-iconlink">
+                        <img class = "iconlink-logo"src="/vendor/img/logo.png" alt="">
+                        <span class ="iconlink-name">SSM</span>
+                    </a>
+                    <div class="header_navbar-cart">
+                        <span class="cart-icon material-icons-outlined">shopping_cart</span>
+                        <span class="cart-amount">0</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <div class="container">
-        <div id="address" class="container-review" data-table="<?php echo $table ?>">
-            <img class="review-picture" src="/uploads/store/store_1.jpg" alt="">
-            <span class="review-id">Bàn: <?php echo $table ?></span>
-            <div class="review-address-box">
-                <span class="review-address">Địa chỉ: 180 Cao Lỗ, phường 4, quận 8, TP.HCM</span>
+        <div class="container-body">
+            <div id="address" class="container-review" data-table="<?php echo $table ?>">
+                <img class="review-picture" src="/uploads/store/store_1.jpg" alt="">
+                <span class="review-id">Bàn: <?php echo $table ?></span>
+                <div class="review-address-box">
+                    <span class="review-address">Địa chỉ: 180 Cao Lỗ, phường 4, quận 8, TP.HCM</span>
+                </div>
             </div>
-        </div>
-        <!-- Phần sản phẩm -->
-        <div class="container-productlist">
-            <!-- Một loại sản phẩm -->
-            <?php foreach ($productType as $valueType): ?>
-            <?php if ($valueType['business'] != 0): ?>
-            <div class="produclist-item">
-                <!-- Tiểu đề loại sản phẩm -->
-                <div class="produclist-item-typename"><?php echo $valueType['typeName'] ?></div>
-                <!-- 1 sản phẩm -->
-                <?php foreach ($product as $value): ?>
-                <?php if ($valueType['code'] == $value['typeCode']): ?>
-                <div class="product">
-                    <div class="product-id" hidden><?php echo $value['id'] ?></div>
-                    <div class="product-picture">
-                        <img src="<?php echo $value['avt']; ?>" alt="" loading="lazy">
-                        <?php if ($value['itemsNew'] != 0): ?>
-                        <span class="banner-new">New</span>
-                        <?php endif ?>
-                        <?php if ($value['bestSeller'] != 0): ?>
-                        <span class="banner-hot">Hot</span>
-                        <?php endif ?>
-                    </div>
-                    <div class="product-info">
-                        <div class="product-name"><?php echo $value['name'] ?></div>
-                        <!-- <div class="product-review">Một sản phẩm tuyệt vời uống vào cười suốt năm kkkkk</div> -->
-
-                        <div class="product-price-buy">
-                            <?php
-                                $value['priceCurrent'] = $value['price'];
-                                if ($value['discount'] != 0) {
-                                    if ($value['discountType'] == 0) {
-                                        $value['priceCurrent'] = $value['priceCurrent']/100*(100-$value['discount']);
-                                    } else {
-                                        $value['priceCurrent'] = $value['priceCurrent']-$value['discount'];
-                                    }
-                                }
-                                $value['priceCurrent'] = number_format($value['priceCurrent'], 0, ',', '.');
-                                $value['price'] = number_format($value['price'], 0, ',', '.');
-                            ?>
-                            <?php if ($value['discount'] != 0): ?>
-                            <span class="product-oldprice"><?php echo $value['price'] ?></span>
+            <!-- Phần sản phẩm -->
+            <div class="container-productlist">
+                <!-- Một loại sản phẩm -->
+                <?php foreach ($productType as $valueType): ?>
+                <?php if ($valueType['business'] != 0): ?>
+                <div class="produclist-item">
+                    <!-- Tiểu đề loại sản phẩm -->
+                    <div class="produclist-item-typename"><?php echo $valueType['typeName'] ?></div>
+                    <!-- 1 sản phẩm -->
+                    <?php foreach ($product as $value): ?>
+                    <?php if ($valueType['code'] == $value['typeCode'] && $value['business'] == true): ?>
+                    <div class="product">
+                        <div class="product-id" hidden><?php echo $value['id'] ?></div>
+                        <div class="product-picture">
+                            <img src="<?php echo $value['avt']; ?>" alt="" loading="lazy">
+                            <?php if ($value['itemsNew'] != 0): ?>
+                            <span class="banner-new">New</span>
                             <?php endif ?>
-                            <span class="product-price"><?php echo $value['priceCurrent'] ?></span>
+                            <?php if ($value['bestSeller'] != 0): ?>
+                            <span class="banner-hot">Hot</span>
+                            <?php endif ?>
                         </div>
-                        <div class="button-groups">
-                            <div class="product-add">Thêm</div>
-                            <div class="amount-groups">
-                                <span class="amount-sub material-icons">remove</span>
-                                <span class="amount-number">
-                                    1
-                                </span>
-                                <span class="amount-sum material-icons">add</span>
+                        <div class="product-info">
+                            <div class="product-name"><?php echo $value['name'] ?></div>
+                            <!-- <div class="product-review">Một sản phẩm tuyệt vời uống vào cười suốt năm kkkkk</div> -->
+
+                            <div class="product-price-buy">
+                                <?php
+                                    $value['priceCurrent'] = $value['price'];
+                                    if ($value['discount'] != 0) {
+                                        if ($value['discountType'] == 0) {
+                                            $value['priceCurrent'] = $value['priceCurrent']/100*(100-$value['discount']);
+                                        } else {
+                                            $value['priceCurrent'] = $value['priceCurrent']-$value['discount'];
+                                        }
+                                    }
+                                    $value['priceCurrent'] = number_format($value['priceCurrent'], 0, ',', '.');
+                                    $value['price'] = number_format($value['price'], 0, ',', '.');
+                                ?>
+                                <?php if ($value['discount'] != 0): ?>
+                                <span class="product-oldprice"><?php echo $value['price'] ?></span>
+                                <?php endif ?>
+                                <span class="product-price"><?php echo $value['priceCurrent'] ?></span>
+                            </div>
+                            <div class="button-groups">
+                                <div class="product-add">Thêm</div>
+                                <div class="amount-groups">
+                                    <span class="amount-sub material-icons">remove</span>
+                                    <span class="amount-number">
+                                        1
+                                    </span>
+                                    <span class="amount-sum material-icons">add</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <?php endif ?>
+                    <?php endforeach ?>
                 </div>
                 <?php endif ?>
                 <?php endforeach ?>
             </div>
-            <?php endif ?>
-            <?php endforeach ?>
-        </div>
-        <div class="cart-outer">
-            <div class="container-cart">
-                <i class="material-icons-outlined" style="margin-right: 8px;">shopping_cart</i>Có <span class="cart-amount" style="margin: 0px 4px;">0</span> sản phẩm trong giỏ hàng               
-            </div>
-        </div>
-
-    </div>
-
-    <div class="cart-main hidden">
-        <div class="cart-box">
-            <div class="cart-header">
-                <span class="btn-back material-icons">arrow_back</span>
-                <h4 class="title">Giỏ hàng</h4>
-            </div>
-            <div class="cart-body">
-                <ul class="cart-list"></ul>
-                <div class="cart-price-all"><b style="margin-right: 15px;">TỔNG:</b>0 Đ</div>
-                <div class="cart-coupon">
-                    <input type="text" placeholder="Mã giảm giá">
-                    <div id="btn-apply-coupon" class="btn-apply-coupon">Áp dụng</div>
-                </div>
-                <div class="cart-price-discount">Khuyến mãi: <i style="margin-left: 15px;">0</i> Đ</div>
-                <div class="cart-price-pay"><b style="margin-right: 15px;">THANH TOÁN:</b>0 Đ</div>
-            </div>
-            <div class="cart-note">
-                <span>Ghi chú:</span>
-                <div class="textarea">
-                    <textarea rows="3" placeholder="Ghi lưu ý cho nhân viên"></textarea>
+            <div class="cart-outer">
+                <div class="container-cart">
+                    <i class="material-icons-outlined" style="margin-right: 8px;">shopping_cart</i>Có <span class="cart-amount" style="margin: 0px 4px;">0</span> sản phẩm trong giỏ hàng               
                 </div>
             </div>
+
         </div>
-        <div class="pay-group">
-            <div class="btn-pay-online">Thanh toán ví momo</div>
-            <div class="btn-pay-offline">Thanh toán tiền mặt</div>
+
+        <div class="cart-main hidden">
+            <div class="cart-box">
+                <div class="cart-header">
+                    <span class="btn-back material-icons">arrow_back</span>
+                    <h4 class="title">Giỏ hàng</h4>
+                </div>
+                <div class="cart-body">
+                    <ul class="cart-list"></ul>
+                    <div class="cart-price-all"><b style="margin-right: 15px;">TỔNG:</b>0 Đ</div>
+                    <div class="cart-coupon">
+                        <input type="text" placeholder="Mã giảm giá">
+                        <div id="btn-apply-coupon" class="btn-apply-coupon">Áp dụng</div>
+                    </div>
+                    <div class="cart-price-discount">Khuyến mãi: <i style="margin-left: 15px;">0</i> Đ</div>
+                    <div class="cart-price-pay"><b style="margin-right: 15px;">THANH TOÁN:</b>0 Đ</div>
+                </div>
+                <div class="cart-note">
+                    <span>Ghi chú:</span>
+                    <div class="textarea">
+                        <textarea rows="3" placeholder="Ghi lưu ý cho nhân viên"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="pay-group">
+                <div class="btn-pay-online">Thanh toán ví momo</div>
+                <div class="btn-pay-offline">Thanh toán tiền mặt</div>
+            </div>
         </div>
     </div>
 

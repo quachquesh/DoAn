@@ -110,6 +110,16 @@ class GetData extends CI_Model {
 		$this->db->where('code', $code);
 		return $this->db->get('vouchers')->row_array();
 	}
+
+	public function getPaymentMethod($id = -1)
+	{
+		$this->db->select('*');
+		if ($id !== -1) {
+			$this->db->where('id', $id);
+			return $this->db->get('payment_method')->row_array();
+		}
+		return $this->db->get('payment_method')->result_array();
+	}
 }
 
 /* End of file GetData.php */
