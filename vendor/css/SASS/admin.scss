@@ -787,6 +787,83 @@ body {
 	.w50 {width: 50%;}
 }
 
+#show-account {
+	width: 100%;
+	border-collapse: collapse;
+
+	th {
+		font-size: 16px;
+		text-align: center;
+	}
+
+	td {
+		font-weight: 300;
+	}
+
+	tr {
+		position: relative;
+		box-sizing: border-box;
+		input, select {
+			width: 100%;
+			padding: 3px;
+			font-size: 16px;
+			box-sizing: border-box;
+			margin: 0;
+			border: none;
+			outline: none;
+			border-width: 0px;
+			// background-color: transparent;
+		}
+
+
+		.btn-group {
+			color: #fff;
+		    text-align: center;
+		    padding: 8px 0;
+
+			.btn-edit {
+				background-color: #4b7bec;
+				-webkit-tap-highlight-color: transparent;
+				margin-right: 5px;
+			}
+
+			.btn-delete {
+				background-color: #DA4B4C;
+				-webkit-tap-highlight-color: transparent;
+			}
+
+			div {
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				border-radius: 3px;
+				user-select: none;
+				cursor: pointer;
+				font-size: 32px;
+    			padding: 3px;
+			}
+		}
+	}
+
+	th, td {
+		border: 1px solid #dddddd;
+		padding: 8px;
+		box-sizing: border-box;
+	}
+
+	tr:nth-child(1) {
+		background-color: #fffff0 !important;
+	}
+	tr:nth-child(even) {
+		background-color: #e6f4ff;
+	}
+	tr:nth-child(odd) {
+	    background-color: #f2fff9;
+	}
+	.time {width: 110px;}
+	.w50 {width: 50%;}
+}
+
 .list-order {
 	width: 100%;
 	border-collapse: collapse;
@@ -989,6 +1066,8 @@ body {
 	}
 }
 
+.edit-password,
+.edit-account,
 .edit-product {
     position: fixed;
     top: var(--height-navbar);
@@ -1307,6 +1386,16 @@ body {
 	outline: none;
 	border: 1px solid black;
 	box-sizing: border-box;
+
+	&.success {
+		border: 1px solid #00C851 !important;
+		outline: 1px solid #00C851 !important;
+	}
+
+	&.fail {
+		border: 1px solid #ff4444 !important;
+		outline: 1px solid #ff4444 !important;
+	}
 }
 .form-group input[name]:focus {
 	outline: 2px solid var(--color-blue2);
@@ -1631,7 +1720,7 @@ body {
 	top: var(--height-navbar);
 	right: 10px;
 	background-color: transparent;
-	z-index: 8;
+	z-index: 99;
 	-webkit-tap-highlight-color: transparent;
 
 	.msg-body {
@@ -1733,7 +1822,7 @@ body {
 .question-box {
 	display: flex;
 	position: absolute;
-	z-index: 10;
+	z-index: 99;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -1785,7 +1874,7 @@ body {
 .message-input-box {
 	display: flex;
 	position: absolute;
-	z-index: 10;
+	z-index: 99;
 	top: 0;
 	left: 0;
 	width: 100%;

@@ -105,8 +105,6 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/vendor/js/msgBox.js"></script>
-
 <script>
 	var formBox = document.querySelector('.form-add-voucher');
 	var form = document.getElementById('form-voucher');

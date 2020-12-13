@@ -12,15 +12,46 @@
 	</div>
 </div>
 <div class="inner__button">
-	<div class="btn btn-trans active">
+	<div id="CreateAccount" class="btn-load-page btn btn-trans active">
 		Tạo tài khoản
 	</div>
-	<div class="btn btn-trans">
+	<div id="ShowAccount" class="btn-load-page btn btn-trans">
 		Tài khoản admin
 	</div>
 </div>
-<div class="inner__body row">
-	<?php include 'createAccount_view.php'; ?>
+<div id="inner__body" class="inner__body row" data-body="CreateAccount">
+	<?php include 'createAccount.php'; ?>
 </div>
 
-<script type="text/javascript" src="/vendor/js/msgBox.js"></script>
+<script>
+	var btnLoadPage = document.querySelectorAll('.btn-load-page');
+	var bodyElement = document.querySelector('.inner__body');
+	btnLoadPage.forEach( function(element, index) {
+		element.addEventListener('click', function() {
+			var elID = this.getAttribute('id');
+			var el = this;
+			document.querySelector('.loading-app-main').classList.remove('hidden');
+			if (bodyElement.getAttribute('data-body') != elID) {
+				$.ajax({
+					url: '/admin/AccountManager/'+elID,
+					type: 'GET',
+					dataType: 'html'
+				})
+				.done(function(data) {
+					btnLoadPage.forEach( function(element, index) {
+						element.classList.remove('active');
+					});
+					el.classList.add('active');
+					$('#inner__body').html(data);
+					bodyElement.setAttribute('data-body', elID);
+				})
+				.fail(function(data) {
+					ShowMsgBox('Fail!', 'Chức năng đang được phát triển', 'OK', 'fail');
+				})
+				.always(function() {
+					document.querySelector('.loading-app-main').classList.add('hidden');
+				});
+			}
+		})
+	});
+</script>

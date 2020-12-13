@@ -32,8 +32,6 @@
 
 </div>
 
-<script type="text/javascript" src="/vendor/js/msgBox.js"></script>
-
 <script>
 
 	<?php if ($role == 2): ?>

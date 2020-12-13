@@ -16,7 +16,7 @@
 						<td class="order-price"><?php echo $value['pricePayment'] ?></td>
 						<td class="order-table"><?php echo $value['tableId'] ?></td>
 						<td class="btn-done order-btn">
-							<span class="material-icons info" style="background-color: #2973D7;">info</span>
+							<!-- <span class="material-icons info" style="background-color: #2973D7;">info</span> -->
 							<span class="material-icons done">done</span>
 							<span class="material-icons remove" style="background-color: #EF5350;">delete_forever</span>
 						</td>

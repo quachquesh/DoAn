@@ -13,46 +13,7 @@ class Login extends CI_Controller {
 
 	public function index()
 	{
-		$method = $this->input->server('REQUEST_METHOD');
-		if ($method == "POST") {
-
-			$username = $this->input->post('username');
-			$password = $this->input->post('password');
-
-			$this->load->model('Users');
-			$check = $this->Users->Validate($username);
-			if ($check) {
-				$checkPwd = password_verify($password, $check['password']);
-				$checkAdmin = $this->Users->ValidateAdmin($username);
-			}
-
-			if ($check && $checkPwd){
-				$data['username'] = $check['username'];
-				$data['email'] = $check['email'];
-				$data['phonenumber'] = $check['phonenumber'];
-				$data['firstname'] = $check['firstname'];
-				$data['lastname'] = $check['lastname'];
-				if ($checkAdmin) {
-					$data['levelAdmin'] = $checkAdmin['level'];
-					$data['adminDateAdd'] = $checkAdmin['dateadd'];
-				}
-				$this->session->set_userdata($data);
-				$this->output
-		        ->set_content_type('application/json')
-		        ->set_output(json_encode($data))
-		        ->set_status_header(200);
-			} else {
-				$data['status'] = false;
-				$data['message'] = "Sai tài khoản hoặc mật khẩu";
-
-				$this->output
-		        ->set_content_type('application/json')
-		        ->set_output(json_encode($data))
-		        ->set_status_header(200);
-			}
-		} else {
-			$this->output->set_status_header(500);
-		}
+		$this->output->set_status_header(500);
 	}
 	public function admin()
 	{
@@ -65,11 +26,15 @@ class Login extends CI_Controller {
 			$this->load->model('admin/AuthUser');
 			$check = $this->AuthUser->Validate($username);
 			$checkPwd = false;
-			if (isset($check)) {
-				$checkPwd = password_verify($password, $check['password']);
+			if ($check) {
+				if ($check['active'] == 0) {
+					$status['status'] = false;
+					$status['message'] = "Tài khoản đã bị khóa, vui lòng liên hệ Chủ cửa hàng";
+				} else
+					$checkPwd = password_verify($password, $check['password']);
 			}
 
-			if (isset($check) && $checkPwd){
+			if ($check && $checkPwd){
 				unset($check['password']);
 				$dulieu = $check;
 				
@@ -85,18 +50,16 @@ class Login extends CI_Controller {
 
 				$status['status'] = true;
 				$status['message'] = "Đăng nhập thành công";
-				$this->output
-		        ->set_content_type('application/json')
-		        ->set_output(json_encode($status))
-		        ->set_status_header(200);
 			} else {
-				$status['status'] = false;
-				$status['message'] = "Sai tài khoản hoặc mật khẩu";
-				$this->output
-		        ->set_content_type('application/json')
-		        ->set_output(json_encode($status))
-		        ->set_status_header(200);
+				if (!isset($status['status'])) {
+					$status['status'] = false;
+					$status['message'] = "Sai tài khoản hoặc mật khẩu";
+				}
 			}
+			$this->output
+	        ->set_content_type('application/json')
+	        ->set_output(json_encode($status))
+	        ->set_status_header(200);	
 		} else {
 			$this->output->set_status_header(500);
 		}

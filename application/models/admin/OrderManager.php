@@ -25,7 +25,7 @@ class OrderManager extends CI_Model {
 		return $this->applyOrder($id, $user, 4);
 	}
 
-	function applyOrder($id, $user , $orderStatus) {
+	private function applyOrder($id, $user , $orderStatus) {
 		$data = array('status' => $orderStatus);
 		$order_confirm = array(
 			'orderId' => $id,

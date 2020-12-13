@@ -44,7 +44,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<div class="message-box" id="message-box">
 		<div class="message-box__overlay"></div>
 		<div class="message-body">
@@ -73,7 +73,6 @@
 	<script  type="text/javascript" src="/vendor/js/app-admin.js"></script>
 	<script  type="text/javascript" src="/vendor/js/msgBox.js"></script>
 	<script  type="text/javascript" src="/vendor/js/qrcode.min.js"></script>
-
 	<script>
 		window.realtime = [];
 		<?php if ($this->session->userdata('role') != 1): ?>
