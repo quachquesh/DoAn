@@ -47,6 +47,7 @@
 			var elID = this.getAttribute('id');
 			var el = this;
 			if (bodyElement.getAttribute('data-body') != elID) {
+				document.querySelector('.loading-app-main').classList.remove('hidden');
 				$.ajax({
 					url: '/admin/OrderManager/'+elID,
 					type: 'GET',
@@ -64,7 +65,7 @@
 					ShowMsgBox('Fail!', 'Chức năng đang được phát triển', 'OK', 'fail');
 				})
 				.always(function() {
-					
+					document.querySelector('.loading-app-main').classList.add('hidden');
 				});
 			}
 		})

@@ -35,8 +35,8 @@
 		element.addEventListener('click', function() {
 			var elID = this.getAttribute('id');
 			var el = this;
-			document.querySelector('.loading-app-main').classList.remove('hidden');
 			if (bodyElement.getAttribute('data-body') != elID) {
+				document.querySelector('.loading-app-main').classList.remove('hidden');
 				$.ajax({
 					url: '/admin/ProductManager/'+elID,
 					type: 'GET',
