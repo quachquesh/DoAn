@@ -19,12 +19,12 @@
 				<div class="card-body">
 					<table id="show-voucher">
 						<tr>
-							<th>Code</th>
-							<th>Content</th>
-							<th>Value</th>
-							<th>Count</th>
-							<th>Time Start</th>
-							<th>Time End</th>
+							<th>Mã</th>
+							<th>Mô tả</th>
+							<th>Giá trị</th>
+							<th>Số lượng</th>
+							<th>Thời gian bắt đầu</th>
+							<th>Thời gian kết thúc</th>
 							<th></th>
 						</tr>
 						<?php foreach ($data as $value): ?>
@@ -127,6 +127,8 @@
 
 		form.querySelector('[type="submit"]').value = "Thêm mã";
 
+		formBox.querySelector('.header-card__icon').innerText = "add_box";
+		formBox.querySelector('.header-card__title').innerText = "Thêm mã khuyến mãi";
 		formBox.classList.remove('hidden');
 		formBox.querySelector('input[name="code"]').removeAttribute('disabled');
 		form.setAttribute('data-action', '/api/Admin/voucher');
@@ -158,7 +160,10 @@
 			form.querySelector('[name="timeStart"]').value = timeStart;
 			form.querySelector('[name="timeEnd"]').value = timeEnd;
 
-			form.querySelector('[type="submit"]').value = "Sửa voucher";
+			form.querySelector('[type="submit"]').value = "Cập nhật voucher";
+
+			formBox.querySelector('.header-card__icon').innerText = "edit";
+			formBox.querySelector('.header-card__title').innerText = "Cập nhật mã khuyến mãi";
 
 			formBox.classList.remove('hidden');
 			formBox.querySelector('input[name="code"]').setAttribute('disabled', true);

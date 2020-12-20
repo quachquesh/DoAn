@@ -18,7 +18,7 @@
 								<span>- <?php echo $valueProc['product']['name']; ?> <b style="color: #ff4757">x <?php echo $valueProc['productAmount'] ?></b></span>
 							<?php endforeach ?>
 						</td>
-						<td class="order-note"><?php echo $value['note'] ?></td>
+						<td class="order-note"><?php echo nl2br($value['note']) ?></td>
 						<td class="order-table"><?php echo $value['tableId'] ?></td>
 						<td class="btn-done">
 							<span>Duyệt</span>
@@ -99,7 +99,7 @@
 						html += `<span>- ${product.product.name} <b style="color: #ff4757">x ${product.productAmount}</b></span>`
 					});
 					html += `</td>`;
-					html += `<td class="order-note">${value.note}</td>`;
+					html += `<td class="order-note">${nl2br(value.note)}</td>`;
 					html += `<td class="order-table">${value.tableId}</td>`;
 					html += `<td class="btn-done"><span>Duyệt</span></td>`;
 					html += `</tr>`;
@@ -117,4 +117,12 @@
 			ShowMsgModal('Lỗi', 'Vui lòng kiểm tra kết nối mạng', 3, 'danger');
 		})
 	}, 2000)
+
+	function nl2br (str, is_xhtml) {
+	    if (typeof str === 'undefined' || str === null) {
+	        return '';
+	    }
+	    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+	    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+	}
 </script>

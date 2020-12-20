@@ -12,7 +12,7 @@
 					<?php foreach ($data as $key => $value): ?>
 					<tr>
 						<td class="order-id"><?php echo $value['id'] ?></td>
-						<td class="order-note"><?php echo $value['note'] ?></td>
+						<td class="order-note"><?php echo nl2br($value['note']) ?></td>
 						<td class="order-table"><?php echo $value['tableId'] ?></td>
 						<td class="btn-done">
 							<span class="material-icons done">done</span>
@@ -83,7 +83,7 @@
 			data.forEach( function(value) {
 				var html = `<tr>
 								<td class="order-id">${value.id}</td>
-								<td class="order-note">${value.note}</td>
+								<td class="order-note">${nl2br(value.note)}</td>
 								<td class="order-table">${value.tableId}</td>
 								<td class="btn-done">
 									<span class="material-icons done">done</span>
@@ -104,5 +104,13 @@
 			ShowMsgModal('Lỗi', 'Vui lòng kiểm tra kết nối mạng', 3, 'danger');
 		})
 	}, 2000)
+
+	function nl2br (str, is_xhtml) {
+	    if (typeof str === 'undefined' || str === null) {
+	        return '';
+	    }
+	    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+	    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+	}
 
 </script>
