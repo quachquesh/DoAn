@@ -245,7 +245,7 @@
 			xData['xEnd'] = 0;
 			xData['xChar'] = '';
 
-			var typeValue = this.value;
+			let typeValue = this.value;
 
 			switch (this.value) {
 				case 'day':
@@ -403,7 +403,8 @@
 			loading.classList.remove('hidden');
 
 			var parentElement = this.parentElement.parentElement;
-			var selectType = document.querySelector('#dashboard .date-pick select[name="select-type-date"]');
+			var selectType = this.parentElement.querySelector('select[name="select-type-date"]');
+			console.log(selectType.value);
 
 			var time = new Date(this.value);
 		    var day = time.getDate();
@@ -434,6 +435,7 @@
 				xData['xEnd'] = 13;
 				xData['xChar'] = '';
 		    }
+		    console.log(xData);
 
 		    $.ajax({
 				url: '/api/Admin/orderHistory',
